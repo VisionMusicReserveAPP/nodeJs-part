@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<TITLE> New Document </TITLE>
+
+<script>
+	var result = '';
+
+    function start_sub()
+    {
+        try {
+         var oHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+         var vURL = "http://localhost:8080/hello/NewFile.jsp";
+
+         oHTTP.open("GET", vURL, false);
+         oHTTP.send();
+         //var obj = oHTTP.ResponseText;
+         var obj = oHTTP.ResponseText;
+         result = obj;
+         
+         var find_first = result.search("예약등록");
+       	 alert(find_first);
+         
+         } catch ( e ) {
+             result = e;
+         }
+         
+         
+    }
+    start_sub();
+    
+</script>
+</HEAD>
+<BODY>
+
+
+</BODY>
+</HTML>

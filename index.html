@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  *{ margin: 0px; padding: 0 px;}
+  div {
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid black;
+    border-radius: 10px;
+  }
+
+  </style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type = "text/javascript" src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+
+var find_title = '';
+var request_2 = ''; // request를 한번에 받을수 있도록 함
+var except_tag = '';
+
+
+function creatRequest(){
+  var request;
+
+  try{
+    request = new XMLHttpRequest();
+  }catch(exception){
+    try{
+      request = new ActiveXObject('Msxml2.XMLHTTP');
+    } catch(innerException) {
+      request = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+  }
+
+  return request;
+}
+
+function accept_request(){ // request를 한번에 해주는 함수
+
+  request_2 = creatRequest();
+  request_2.open('GET','http://localhost:8080/hello/NewFile.jsp',false);
+  //Ajax를 수행
+  request_2.send();
+
+}
+
+function find_title_Request(){ //예약 페이지의 제목을 찾아주는 역할
+
+  accept_request(); // 로컬 호스트에 올려져있는 페이지를 요청
+
+  //출력합니다
+  var find_title_1 = request_2.responseText.search("비전합주실"); //7월 합주실 예약
+  var find_title_2 = request_2.responseText.search("일정상황"); //7월 합주실 예약
+  var find_title_result = request_2.responseText.slice(find_title_1,find_title_2-2);
+
+  find_title = find_title_result;
+  alert(find_title);
+}
+
+function find_vision_band(){
+
+ accept_request();
+}
+
+function select_tag(){
+//비전 합주실 렌탈 예약
+  accept_request();
+
+  var temp_total = '';//임시로 받아 놓을 수 있는 변수
+  var temp_search = ''; //
+  var temp_search2 = '';
+  var temp_slice = '' ;
+  var temp_sub = '' // while문을 도와줌
+
+
+
+  //전체적으로 한번 잘라냄
+  temp_total = request_2.responseText; // 임시 변수에 값을 넣음
+  temp_search = temp_total.search("비전합주실 렌탈대여");
+  //alert(temp_search);
+  temp_search2 = temp_total.indexOf("<a href=",temp_search);
+  //alert(temp_search2);
+  temp_slice = temp_total.slice(temp_search,temp_search2+1);
+  //alert(temp_slice);
+
+  //세부적으로 나눔
+  temp_total = temp_slice;
+  temp_sub = temp_total.lastIndexOf("<");
+  //alert(temp_sub);
+
+  //태그문자 제거
+for(var i = 0; i<100;i++){
+  temp_search = temp_total.search("<");
+  temp_search2 = temp_total.indexOf(">",temp_search);
+  temp_slice = temp_total.slice(temp_search,temp_search2+1);
+
+  temp_total = temp_total.replace(temp_slice, '');
+}
+// <문자가열이 존재할때를 찾아봐야됨
+alert(temp_total);
+if(temp_total.search('<') != 1) {
+
+  alert('d');
+
+}
+temp_total = temp_total.replace('<','');
+temp_total = temp_total.replace('&nbsp;','');
+
+//alert(temp_total); //문자열만 남음
+
+// 2] 1]순서 찾기 로직 만들기
+var logic_num = ']';
+var change_num = 1;
+//따로 내용을 저장할 배열 지정
+
+
+temp_search = temp_total.search(change_num + logic_num); // 1]
+temp_search2 = temp_total.lastIndexOf(']');
+temp_slice = temp_total.slice(temp_search,temp_search2+1); // 첫번째 장비 대여 항목 저장
+//alert(temp_slice); //1]을 포함한 문자열
+temp_total = temp_total.replace(temp_slice, '');
+alert(temp_total);
+temp_slice = temp_slice.replace(change_num + logic_num, '');
+alert(temp_slice); // 1]을 지운 문자열 이 문자열을 배열로 저장하기
+
+
+//while(temp_search)
+
+
+
+
+  /*
+  temp_search = temp_total.search("<");
+  temp_search2 = temp_total.indexOf(">",temp_search);
+  temp_slice = temp_total.slice(temp_search,temp_search2+1);
+
+  //alert(temp_test);
+  alert(temp_slice);
+
+  temp_total = temp_total.replace(temp_slice, ''); //태그문자열 삭제 코드
+  alert(temp_total);
+  */
+
+
+}
+
+
+
+
+$(document).ready(function(){
+  //find_title_Request();
+  select_tag();
+});
+</script>
+</head>
+<body>
+
+</body>
+</html>

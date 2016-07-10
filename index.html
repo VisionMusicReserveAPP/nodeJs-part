@@ -18,6 +18,11 @@
 var find_title = '';
 var request_2 = ''; // request를 한번에 받을수 있도록 함
 var except_tag = '';
+var seperate_result = '';
+
+var today = '';
+var month = '';
+var lastdate = '';
 
 
 function creatRequest(){
@@ -55,15 +60,82 @@ function find_title_Request(){ //예약 페이지의 제목을 찾아주는 역�
   var find_title_result = request_2.responseText.slice(find_title_1,find_title_2-2);
 
   find_title = find_title_result;
-  alert(find_title);
+  //alert(find_title);
 }
 
 function find_vision_band(){
 
  accept_request();
+
+ var temp_total = '';//임시로 받아 놓을 수 있는 변수
+ var temp_search = ''; //
+ var temp_search2 = '';
+ var temp_slice = '' ;
+ var temp_sub = '' // while문을 도와줌
+
+ //전체적으로 한번 자르기
+ temp_total = request_2.responseText; // 임시 변수에 값을 넣음
+ temp_search =  temp_total.lastIndexOf('2411BA4D574ECBC831E925');//+3
+ temp_search2 = temp_total.search("</table>");
+ temp_total = temp_total.slice(temp_search+24, temp_search2);
+
+ temp_sub = temp_total.lastIndexOf("<");
+ temp_search = temp_total.search("<");
+
+
+ for(var i = 0;i<10000;i++){
+ temp_search = temp_total.search("<");
+ temp_search2 = temp_total.indexOf(">",temp_search);
+ temp_slice = temp_total.slice(temp_search,temp_search2+1);
+
+ temp_total = temp_total.replace(temp_slice, '');
 }
 
-function select_tag(){
+ temp_total = temp_total.replace('>', '');
+ temp_total = temp_total.replace('&nbsp;', '');
+
+ to_date();
+
+ var logic_num = '-';
+ var change_num = lastdate;
+ var save_data = new Array(lastdate);
+ var temp_count = 0;
+
+
+ while(temp_count != lastdate ){ //기준이 되는 compare_slice 와 temp_count를 비교
+
+ temp_search = temp_total.search(change_num + logic_num); // 30-
+ temp_search2 = temp_total.indexOf(change_num-1 + logic_num, temp_search);
+ temp_slice = temp_total.slice(temp_search,temp_search2);
+
+ save_data[temp_count] = temp_slice;
+
+ temp_count++;
+ change_num--;
+ }
+
+  document.body.innerHTML = save_data[2];
+
+
+
+}
+
+function to_date(){
+   today = new Date();
+   month = today.getMonth();
+
+   if(month == 2){
+     lastdate = 28; //윤년 일 경우는 29
+   }
+   else if (month == 4 || month == 6 || month == 9 || month == 11 ) {
+     lastdate = 30;
+   }
+   else{
+     lastdate = 31;
+   }
+}
+
+function rental_reservation(){
 //비전 합주실 렌탈 예약
   accept_request();
 
@@ -97,23 +169,28 @@ for(var i = 0; i<100;i++){
 
   temp_total = temp_total.replace(temp_slice, '');
 }
-// <문자가열이 존재할때를 찾아봐야됨
-alert(temp_total);
-if(temp_total.search('<') != 1) {
 
-  alert('d');
-
-}
 temp_total = temp_total.replace('<','');
 temp_total = temp_total.replace('&nbsp;','');
 
-//alert(temp_total); //문자열만 남음
+alert(temp_total); //문자열만 남음
 
 // 2] 1]순서 찾기 로직 만들기
 var logic_num = ']';
 var change_num = 1;
 //따로 내용을 저장할 배열 지정
+temp_search = temp_total.search(change_num + logic_num); // 1]
+temp_search2 = temp_total.lastIndexOf(']');
 
+temp_compare = temp_total.search(']') + 1; // 아래서부터 위로 번호가 올라가는 형식 ] 앞에 있는 번수를 파악
+temp_compare_slice = temp_total.slice(temp_compare-3,temp_compare-1); //두자리 수 일 가능성을 고려
+temp_compare_slice = temp_compare_slice.replace('&nbsp;','');
+
+alert(temp_compare_slice);
+
+var temp_count = 0;
+
+while(temp_count != temp_compare_slice ){ //기준이 되는 compare_slice 와 temp_count를 비교
 
 temp_search = temp_total.search(change_num + logic_num); // 1]
 temp_search2 = temp_total.lastIndexOf(']');
@@ -124,33 +201,22 @@ alert(temp_total);
 temp_slice = temp_slice.replace(change_num + logic_num, '');
 alert(temp_slice); // 1]을 지운 문자열 이 문자열을 배열로 저장하기
 
-
-//while(temp_search)
-
-
-
-
-  /*
-  temp_search = temp_total.search("<");
-  temp_search2 = temp_total.indexOf(">",temp_search);
-  temp_slice = temp_total.slice(temp_search,temp_search2+1);
-
-  //alert(temp_test);
-  alert(temp_slice);
-
-  temp_total = temp_total.replace(temp_slice, ''); //태그문자열 삭제 코드
-  alert(temp_total);
-  */
-
+temp_count++;
+change_num++;
 
 }
+}
+
+
+
 
 
 
 
 $(document).ready(function(){
   //find_title_Request();
-  select_tag();
+  find_vision_band();
+  //rental_reservation(); //비전 렌탈 예약
 });
 </script>
 </head>

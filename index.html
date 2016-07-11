@@ -19,6 +19,7 @@ var find_title = '';
 var request_2 = ''; // request를 한번에 받을수 있도록 함
 var except_tag = '';
 var seperate_result = '';
+ var save_data = new Array(lastdate);
 
 var today = '';
 var month = '';
@@ -98,7 +99,6 @@ function find_vision_band(){
 
  var logic_num = '-';
  var change_num = lastdate;
- var save_data = new Array(lastdate);
  var temp_count = 0;
 
 
@@ -114,11 +114,44 @@ function find_vision_band(){
  change_num--;
  }
 
-  document.body.innerHTML = save_data[2];
-
-
+load_data();
+  //room을 기준으로 나눠짐 먼저 A룸부터 C룸까지 데이터를 순차적으로 검색
 
 }
+
+function load_data(){
+
+var temp_total = '';
+var temp_search = ''; //
+var temp_search2 = '';
+var temp_slice = '' ;
+
+document.body.innerHTML = save_data[2];//
+var temp_search = save_data[2].search('room');
+
+var logic_num = ']';
+var change_num = 1;
+
+temp_search = save_data[2].search(change_num + logic_num); // 1]
+temp_search2 = save_data[2].indexOf(']',temp_search);
+temp_slice = save_data[2].slice(temp_search,temp_search2+1); // 첫번째 장비 대여 항목 저장
+//alert(temp_search);
+//alert(temp_slice);
+
+var temp_count = 0;
+
+
+
+//따로 내용을 저장할 배열 지정
+/*
+
+temp_compare = temp_total.search(']') + 1; // 아래서부터 위로 번호가 올라가는 형식 ] 앞에 있는 번수를 파악
+temp_compare_slice = temp_total.slice(temp_compare-3,temp_compare-1); //두자리 수 일 가능성을 고려
+temp_compare_slice = temp_compare_slice.replace('&nbsp;','');
+*/
+
+}
+
 
 function to_date(){
    today = new Date();

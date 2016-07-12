@@ -125,20 +125,36 @@ var temp_total = '';
 var temp_search = ''; //
 var temp_search2 = '';
 var temp_slice = '' ;
+var temp_sub = ''; // 요일을 비교할 내용
+var temp_count = ''; // 요일 숫자
 
-document.body.innerHTML = save_data[2];//
-var temp_search = save_data[2].search('room');
+
+var week = ['월','화','수','목','금','토','일'];
+var day_decision = '';
+
 
 var logic_num = ']';
-var change_num = 1;
+temp_sub = save_data[10].search(logic_num);
+temp_search = save_data[10].slice(temp_sub-1,temp_sub);
+//요일을 알아내는 로직
+for(var i=0;i<7; i++){
+if(week[i] == temp_search){
+  day_decision = week[i]; // 월요일인 것이 결정됨 월요일 이외의 것들을 지워야함
+  temp_count = i;
+  week.splice(i,1);
+}
+}
+  for(var y=0;y<2;y++){
+    for(var i = 0;i<6;i++){
+    temp_sub = save_data[10].indexOf(week[i] + logic_num, day_decision + logic_num);//차기요일
+    alert(week[i]); // 화 수 목 금 토 일 만 추출
+}
+}
 
-temp_search = save_data[2].search(change_num + logic_num); // 1]
-temp_search2 = save_data[2].indexOf(']',temp_search);
-temp_slice = save_data[2].slice(temp_search,temp_search2+1); // 첫번째 장비 대여 항목 저장
-//alert(temp_search);
-//alert(temp_slice);
+temp_search = save_data[10].search(day_decision + logic_num);
+temp_slice = save_data[10].slice(temp_search , temp_sub);
 
-var temp_count = 0;
+document.body.innerHTML = temp_slice;
 
 
 

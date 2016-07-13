@@ -132,39 +132,36 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-
+var day_search = 10;
 var logic_num = ']';
-temp_sub = save_data[10].search(logic_num);
-temp_search = save_data[10].slice(temp_sub-1,temp_sub);
+
+temp_sub = save_data[day_search].search(logic_num);
+temp_search = save_data[day_search].slice(temp_sub-1,temp_sub);
+
 //요일을 알아내는 로직
 for(var i=0;i<7; i++){
-if(week[i] == temp_search){
-  day_decision = week[i]; // 월요일인 것이 결정됨 월요일 이외의 것들을 지워야함
-  temp_count = i;
-  week.splice(i,1);
-}
-}
-  for(var y=0;y<2;y++){
-    for(var i = 0;i<6;i++){
-    temp_sub = save_data[10].indexOf(week[i] + logic_num, day_decision + logic_num);//차기요일
-    alert(week[i]); // 화 수 목 금 토 일 만 추출
-}
+  if(week[i] == temp_search){
+    day_decision = week[i]; // 월요일인 것이 결정됨 월요일 이외의 것들을 지워야함
+    temp_count = i;
+    week.splice(i,1);
+  }
 }
 
-temp_search = save_data[10].search(day_decision + logic_num);
-temp_slice = save_data[10].slice(temp_search , temp_sub);
+/* 날짜 공백이 생기는 곳은 다른 날의 데이터까지 불러오게 됨. 그것을 방지하기 위한 반복문.
+  하지만 마지막에 다듬는 작업이 필요함.  */
+for(var i = 0; i<6;i++){
+  if(save_data[4].search(week[i]) != '' ){
+    temp_search = save_data[day_search].indexOf(week[i] + logic_num, day_decision + logic_num);//차기요일
+    temp_search2 = save_data[day_search].lastIndexOf(logic_num);
+    temp_slice = save_data[day_search].slice(temp_search,temp_search2);
+    save_data[day_search] = save_data[day_search].replace(temp_slice,'');
+  }
+  else{
+  return true;
+  }
 
-document.body.innerHTML = temp_slice;
-
-
-
-//따로 내용을 저장할 배열 지정
-/*
-
-temp_compare = temp_total.search(']') + 1; // 아래서부터 위로 번호가 올라가는 형식 ] 앞에 있는 번수를 파악
-temp_compare_slice = temp_total.slice(temp_compare-3,temp_compare-1); //두자리 수 일 가능성을 고려
-temp_compare_slice = temp_compare_slice.replace('&nbsp;','');
-*/
+}
+document.body.innerHTML = save_data[day_search];
 
 }
 

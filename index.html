@@ -19,12 +19,33 @@ var find_title = '';
 var request_2 = ''; // request를 한번에 받을수 있도록 함
 var except_tag = '';
 var seperate_result = '';
- var save_data = new Array(lastdate);
+var save_data = new Array(lastdate);
 
 var today = '';
 var month = '';
 var lastdate = '';
 
+var go_function = ''; // 저장을 하기위한 매개 변수
+
+function writefile(go_function){
+
+  try
+  {
+    var opener = new ActiveXObject("Scripting.FileSystemObject");
+    var file = opener.OpenTextFile('C:\\node\\public\\test1.txt',2,true);
+
+    file.WriteLine(go_function);
+
+    file.Close();
+  } catch (e){
+    if(e.number == -2146827859){
+      alert('저장이 안됩니다. 오류를 수정해 주세요!');
+    }
+  }
+
+
+
+}
 
 function creatRequest(){
   var request;
@@ -163,7 +184,17 @@ for(var i = 0; i<6;i++){
 }
 document.body.innerHTML = save_data[day_search];
 
+go_function = save_data[day_search];//저장을 하기전 매개변수에다 저장
+
+writefile(go_function);
+
+
+
 }
+//액티브 x랑 xml파일 만드는거, 방별로 나누는 작업
+
+
+
 
 
 function to_date(){

@@ -156,7 +156,7 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 9;
+var day_search = 13;
 var logic_num = ']';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -187,12 +187,60 @@ for(var i = 0; i<6;i++){
 }
 document.body.innerHTML = save_data[day_search];
 //먼저 오픈시간과 A,B,C 룸을 나눔
+
+//오픈 시간을 알아내는 코드
+
+temp_search = save_data[day_search].search(']');
+temp_search2 = save_data[day_search].indexOf('room',temp_search);
+temp_slice = save_data[day_search].slice(temp_search,temp_search2);
+
+
+temp_search = temp_slice.search(']');
+temp_search2 = temp_slice.lastIndexOf('-');
+temp_slice = temp_slice.slice(temp_search,temp_search2);
+alert(temp_slice);
+
+if(temp_slice == ''){
+  alert('문여는 시간이 정해지지 않았습니다.');
+}
+
+// alert(temp_slice);
+
+
 temp_search = save_data[day_search].search('최대인원 제한 예약');
+temp_search2 = save_data[day_search].search('7인수용');
+temp_sub = save_data[day_search].search('5인');
 //alert(temp_search);
 if(temp_search == -1 ){
-  alert('d');
-} else{
-  alert('a');
+
+  alert('A룸 예약이 없음');//
+
+  if(temp_search2 != -1){
+
+    alert('B룸 예약이 존재');
+
+    temp_search = save_data[day_search].search('7인수용');
+    temp_search2 = save_data[day_search].indexOf('room',temp_search);
+
+    if(temp_search2 == -1){ // c룸 예약이 없을경우
+       alert('B룸은 있지만 c룸 예약이 없음');
+       temp_search2 = save_data[day_search].lastIndexOf(']');
+       temp_slice = save_data[day_search].slice(temp_search+9,temp_search2);
+       alert(temp_slice);
+    }
+
+    if(temp_sub != -1){
+      alert('C룸 예약이 존재');
+    }
+  }
+
+} else if(temp_search2 == -1 ){
+  alert('B룸 예약이 없음');
+} else if(temp_sub == -1){
+  alert('C룸 예약이 없음');
+}
+else{
+  alert('모든 방 예약이 존재');
 }
 /*
 고정 부분 바뀌지 않는다
@@ -201,6 +249,10 @@ B룸 - 7인 수용
 c룸 - 5인
 
 */
+
+
+
+
 //var xmlData += '<?xml version='+"1.0"+' encoding='+'UTF-8'+'?>';
 
 

@@ -24,6 +24,7 @@ var save_data = new Array(lastdate);
 var today = '';
 var month = '';
 var lastdate = '';
+var xmlData = ''; // xml로 데이터를 저장
 
 var go_function = ''; // 저장을 하기위한 매개 변수
 
@@ -44,8 +45,9 @@ function writefile(go_function){
   }
 
 
-
 }
+
+
 
 function creatRequest(){
   var request;
@@ -84,6 +86,7 @@ function find_title_Request(){ //예약 페이지의 제목을 찾아주는 역�
   find_title = find_title_result;
   //alert(find_title);
 }
+
 
 function find_vision_band(){
 
@@ -153,7 +156,7 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 10;
+var day_search = 9;
 var logic_num = ']';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -183,10 +186,28 @@ for(var i = 0; i<6;i++){
 
 }
 document.body.innerHTML = save_data[day_search];
+//먼저 오픈시간과 A,B,C 룸을 나눔
+temp_search = save_data[day_search].search('최대인원 제한 예약');
+//alert(temp_search);
+if(temp_search == -1 ){
+  alert('d');
+} else{
+  alert('a');
+}
+/*
+고정 부분 바뀌지 않는다
+A룸 - 최대인원 제한 예약 존재
+B룸 - 7인 수용
+c룸 - 5인
 
-go_function = save_data[day_search];//저장을 하기전 매개변수에다 저장
+*/
+//var xmlData += '<?xml version='+"1.0"+' encoding='+'UTF-8'+'?>';
 
-writefile(go_function);
+
+
+//go_function = save_data[day_search];//저장을 하기전 매개변수에다 저장
+
+//writefile(go_function);
 
 
 

@@ -24,6 +24,8 @@ var save_data = new Array(lastdate);
 var today = '';
 var month = '';
 var lastdate = '';
+var Opentime ='';
+
 var xmlData = ''; // xml로 데이터를 저장
 
 var go_function = ''; // 저장을 하기위한 매개 변수
@@ -156,7 +158,7 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 13;
+var day_search = 28;
 var logic_num = ']';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -173,8 +175,9 @@ for(var i=0;i<7; i++){
 
 /* 날짜 공백이 생기는 곳은 다른 날의 데이터까지 불러오게 됨. 그것을 방지하기 위한 반복문.
   하지만 마지막에 다듬는 작업이 필요함.  */
+//아래부분을 다시 수정해야함 24일 넘어가면서 데이터가 앞에 데이터를 불러오는 문제가 발생..
 for(var i = 0; i<6;i++){
-  if(save_data[4].search(week[i]) != '' ){
+  if(save_data[day_search].search(week[i]) != '' ){
     temp_search = save_data[day_search].indexOf(week[i] + logic_num, day_decision + logic_num);//차기요일
     temp_search2 = save_data[day_search].lastIndexOf(logic_num);
     temp_slice = save_data[day_search].slice(temp_search,temp_search2);
@@ -196,12 +199,37 @@ temp_slice = save_data[day_search].slice(temp_search,temp_search2);
 
 
 temp_search = temp_slice.search(']');
-temp_search2 = temp_slice.lastIndexOf('-');
+temp_search2 = temp_slice.lastIndexOf('room');
 temp_slice = temp_slice.slice(temp_search,temp_search2);
+
 alert(temp_slice);
 
-if(temp_slice == ''){
-  alert('문여는 시간이 정해지지 않았습니다.');
+if(temp_slice.lastIndexOf("0") == -1){
+  //만약 한국어로 적혀있는 경우
+  if(temp_slice.search("오늘") != -1 || temp_slice.search("시") != -1){
+    temp_search = temp_slice.search('오늘');
+    temp_search2 = temp_slice.indexOf('A',temp_search);
+    temp_slice = temp_slice.slice(temp_search, temp_search2);
+
+    while(temp_slice.search('&nbsp;') != -1){
+    temp_slice = temp_slice.replace('&nbsp;','');
+  }
+    alert(temp_slice);
+  }
+
+  else{
+    alert('문여는 시간이 정해지지 않았습니다.');
+  }
+
+} else {
+  alert('문여는 시간이 존재');
+  temp_search = temp_slice.search(']');
+  temp_search2 = temp_slice.lastIndexOf("0");
+  temp_slice = temp_slice.slice(temp_search+1,temp_search2+1);
+  while(temp_slice.search('&nbsp;') != -1){
+  temp_slice = temp_slice.replace('&nbsp;','');
+}
+  alert(temp_slice);
 }
 
 // alert(temp_slice);

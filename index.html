@@ -25,6 +25,7 @@ var today = '';
 var month = '';
 var lastdate = '';
 var Opentime ='';
+var temp = '';
 
 var xmlData = ''; // xml로 데이터를 저장
 
@@ -127,18 +128,54 @@ function find_vision_band(){
  var change_num = lastdate;
  var temp_count = 0;
 
+ document.body.innerHTML = temp_total;
+
 
  while(temp_count != lastdate ){ //기준이 되는 compare_slice 와 temp_count를 비교
 
  temp_search = temp_total.search(change_num + logic_num); // 30-
+ if(temp_search == -1){
+   //alert(change_num);
+   save_data[temp_count] = 'Not Found!';
+
+ }
+
+
  temp_search2 = temp_total.indexOf(change_num-1 + logic_num, temp_search);
+
+ if(temp_search2 == -1){
+    var a = 2;
+   while(temp_search2 == -1 ){
+
+   temp_search2 = temp_total.indexOf(change_num - a );
+   temp = change_num - a;
+   a--;
+
+  }
+  alert(temp);
+ }
+
+ if(change_num == 1){ //마지막 번호가 남을경우
+   temp_search = temp_total.search(change_num + logic_num); // 30-
+   temp_search2 = temp_total.lastIndexOf(']')+1;
+
+ }
+//0번째 숫자를 기준으로 해결
+
  temp_slice = temp_total.slice(temp_search,temp_search2);
+ temp_total = temp_total.replace(temp_slice,'');
+
+ //temp_search2 가 문제
+
+ //한자리수 날짜들은 두자리수에 묻히는 불상사 발생
 
  save_data[temp_count] = temp_slice;
 
  temp_count++;
  change_num--;
+
  }
+
 
 load_data();
   //room을 기준으로 나눠짐 먼저 A룸부터 C룸까지 데이터를 순차적으로 검색
@@ -158,11 +195,12 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 28;
-var logic_num = ']';
+var day_search = 25;
+var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
 temp_search = save_data[day_search].slice(temp_sub-1,temp_sub);
+
 
 //요일을 알아내는 로직
 for(var i=0;i<7; i++){
@@ -176,6 +214,7 @@ for(var i=0;i<7; i++){
 /* 날짜 공백이 생기는 곳은 다른 날의 데이터까지 불러오게 됨. 그것을 방지하기 위한 반복문.
   하지만 마지막에 다듬는 작업이 필요함.  */
 //아래부분을 다시 수정해야함 24일 넘어가면서 데이터가 앞에 데이터를 불러오는 문제가 발생..
+
 for(var i = 0; i<6;i++){
   if(save_data[day_search].search(week[i]) != '' ){
     temp_search = save_data[day_search].indexOf(week[i] + logic_num, day_decision + logic_num);//차기요일
@@ -189,6 +228,7 @@ for(var i = 0; i<6;i++){
 
 }
 document.body.innerHTML = save_data[day_search];
+
 //먼저 오픈시간과 A,B,C 룸을 나눔
 
 //오픈 시간을 알아내는 코드
@@ -202,7 +242,7 @@ temp_search = temp_slice.search(']');
 temp_search2 = temp_slice.lastIndexOf('room');
 temp_slice = temp_slice.slice(temp_search,temp_search2);
 
-alert(temp_slice);
+//alert(temp_slice);
 
 if(temp_slice.lastIndexOf("0") == -1){
   //만약 한국어로 적혀있는 경우
@@ -214,22 +254,22 @@ if(temp_slice.lastIndexOf("0") == -1){
     while(temp_slice.search('&nbsp;') != -1){
     temp_slice = temp_slice.replace('&nbsp;','');
   }
-    alert(temp_slice);
+  //  alert(temp_slice);
   }
 
   else{
-    alert('문여는 시간이 정해지지 않았습니다.');
+  //  alert('문여는 시간이 정해지지 않았습니다.');
   }
 
 } else {
-  alert('문여는 시간이 존재');
+  //alert('문여는 시간이 존재');
   temp_search = temp_slice.search(']');
   temp_search2 = temp_slice.lastIndexOf("0");
   temp_slice = temp_slice.slice(temp_search+1,temp_search2+1);
   while(temp_slice.search('&nbsp;') != -1){
   temp_slice = temp_slice.replace('&nbsp;','');
 }
-  alert(temp_slice);
+//  alert(temp_slice);
 }
 
 // alert(temp_slice);
@@ -241,34 +281,34 @@ temp_sub = save_data[day_search].search('5인');
 //alert(temp_search);
 if(temp_search == -1 ){
 
-  alert('A룸 예약이 없음');//
+  //alert('A룸 예약이 없음');//
 
   if(temp_search2 != -1){
 
-    alert('B룸 예약이 존재');
+  //  alert('B룸 예약이 존재');
 
     temp_search = save_data[day_search].search('7인수용');
     temp_search2 = save_data[day_search].indexOf('room',temp_search);
 
     if(temp_search2 == -1){ // c룸 예약이 없을경우
-       alert('B룸은 있지만 c룸 예약이 없음');
+    //   alert('B룸은 있지만 c룸 예약이 없음');
        temp_search2 = save_data[day_search].lastIndexOf(']');
        temp_slice = save_data[day_search].slice(temp_search+9,temp_search2);
-       alert(temp_slice);
+    //   alert(temp_slice);
     }
 
     if(temp_sub != -1){
-      alert('C룸 예약이 존재');
+    //  alert('C룸 예약이 존재');
     }
   }
 
 } else if(temp_search2 == -1 ){
-  alert('B룸 예약이 없음');
+//  alert('B룸 예약이 없음');
 } else if(temp_sub == -1){
-  alert('C룸 예약이 없음');
+//  alert('C룸 예약이 없음');
 }
 else{
-  alert('모든 방 예약이 존재');
+//  alert('모든 방 예약이 존재');
 }
 /*
 고정 부분 바뀌지 않는다

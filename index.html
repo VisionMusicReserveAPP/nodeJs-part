@@ -20,6 +20,10 @@ var request_2 = ''; // request를 한번에 받을수 있도록 함
 var except_tag = '';
 var seperate_result = '';
 var save_data = new Array(lastdate);
+var A_Room = new Array(reserve_count);
+var B_Room = new Array(reserve_count);
+//var C_Room = new Array(reserve_count);
+var reserve_count = 0;
 
 var today = '';
 var month = '';
@@ -152,7 +156,6 @@ function find_vision_band(){
    a--;
 
   }
-  alert(temp);
  }
 
  if(change_num == 1){ //마지막 번호가 남을경우
@@ -195,7 +198,7 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 25;
+var day_search = 26;
 var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -258,11 +261,11 @@ if(temp_slice.lastIndexOf("0") == -1){
   }
 
   else{
-  //  alert('문여는 시간이 정해지지 않았습니다.');
+    alert('문여는 시간이 정해지지 않았습니다.');
   }
 
 } else {
-  //alert('문여는 시간이 존재');
+  alert('문여는 시간이 존재');
   temp_search = temp_slice.search(']');
   temp_search2 = temp_slice.lastIndexOf("0");
   temp_slice = temp_slice.slice(temp_search+1,temp_search2+1);
@@ -279,36 +282,79 @@ temp_search = save_data[day_search].search('최대인원 제한 예약');
 temp_search2 = save_data[day_search].search('7인수용');
 temp_sub = save_data[day_search].search('5인');
 //alert(temp_search);
+
+// A룸 예약이 없을 경우
 if(temp_search == -1 ){
 
-  //alert('A룸 예약이 없음');//
+  alert('A룸 예약이 없음');
 
   if(temp_search2 != -1){
 
-  //  alert('B룸 예약이 존재');
+    alert('B룸 예약이 존재');
 
     temp_search = save_data[day_search].search('7인수용');
     temp_search2 = save_data[day_search].indexOf('room',temp_search);
+    temp_slice = save_data[day_search].slice(temp_search,temp_search2);
+    alert(temp_slice);
 
     if(temp_search2 == -1){ // c룸 예약이 없을경우
-    //   alert('B룸은 있지만 c룸 예약이 없음');
+       alert('B룸은 있지만 c룸 예약이 없음');
        temp_search2 = save_data[day_search].lastIndexOf(']');
        temp_slice = save_data[day_search].slice(temp_search+9,temp_search2);
-    //   alert(temp_slice);
+       alert(temp_slice);
     }
 
     if(temp_sub != -1){
-    //  alert('C룸 예약이 존재');
+      alert('C룸 예약이 존재');
+
+
     }
   }
 
-} else if(temp_search2 == -1 ){
-//  alert('B룸 예약이 없음');
-} else if(temp_sub == -1){
-//  alert('C룸 예약이 없음');
+} // A,C룸 예약이 있을 경우
+  else if(temp_search2 == -1 ){
+  alert('B룸 예약이 없음');
+
+} // A, B룸 예약이 있을 경우
+  else if(temp_sub == -1){
+  alert('C룸 예약이 없음');
+
+// A룸 부터 나눔, 먼저 크게 한번 나누고 항목별로 나눠보기
+  temp_search =  save_data[day_search].search('예약');
+  temp_search2 = save_data[day_search].indexOf('vision room');
+  temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-3);
+  alert(temp_slice);
+
+  A_Room[reserve_count] = temp_slice;
+
+
+
+// B룸
+  temp_search =  save_data[day_search].search('수용');
+  temp_search2 = save_data[day_search].lastIndexOf(']');
+  temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
+
+  temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
+
+  while(temp_search != -1){
+
+  temp_search = temp_sub.search( reserve_count+1 +']');
+  alert(temp_search);
+  temp_search2 = temp_sub.lastIndexOf(']');
+  temp_slice = temp_sub.slice(temp_search+2,temp_search2+2);
+  temp_sub = temp_sub.replace(temp_slice,'');
+  alert(temp_slice);
+
+  B_Room[reserve_count] = temp_slice;
+
+  reserve_count++;
+
+}
+
+
 }
 else{
-//  alert('모든 방 예약이 존재');
+  alert('모든 방 예약이 존재');
 }
 /*
 고정 부분 바뀌지 않는다

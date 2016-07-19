@@ -339,18 +339,19 @@ if(temp_search == -1 ){
   while(temp_search != -1){
 
   temp_search = temp_sub.search( reserve_count+1 +']');
-  alert(temp_search);
   temp_search2 = temp_sub.lastIndexOf(']');
-  temp_slice = temp_sub.slice(temp_search+2,temp_search2+2);
+  temp_slice = temp_sub.slice(temp_search,temp_search2+1);
   temp_sub = temp_sub.replace(temp_slice,'');
-  alert(temp_slice);
 
-  B_Room[reserve_count] = temp_slice;
-
-  reserve_count++;
+  if(temp_slice ==''){
+    //세이브를 하지 않음
+  }
+  else{
+    B_Room[reserve_count] = temp_slice;
+    reserve_count++;
+  }
 
 }
-
 
 }
 else{

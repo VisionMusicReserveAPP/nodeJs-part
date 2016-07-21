@@ -22,7 +22,7 @@ var seperate_result = '';
 var save_data = new Array(lastdate);
 var A_Room = new Array(reserve_count);
 var B_Room = new Array(reserve_count);
-//var C_Room = new Array(reserve_count);
+var C_Room = new Array(reserve_count);
 var reserve_count = 0;
 
 var today = '';
@@ -380,15 +380,52 @@ else{
     temp_search =  save_data[day_search].search('예약');
     temp_search2 = save_data[day_search].indexOf('vision room');
     temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-3);
-
+    alert(temp_slice);
     temp_sub = temp_slice;
 
-    while(temp_search != -1){
 
-    temp_search = temp_sub.search( reserve_count+1 +']');
-    temp_search2 = temp_sub.lastIndexOf(']');
+    while(temp_search != -1){
+    var num = temp_sub.slice(0,1);
+     // 최종 기준이 되는 숫자
+
+    if(num == 1){
+      temp_search = temp_sub.search(num+']');
+      temp_search2 = temp_sub.lastIndexOf(']');
+      temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+      temp_sub = temp_sub.replace(temp_slice,'');
+
+      A_Room[reserve_count] = temp_slice;
+      reserve_count++;
+    }
+    else{
+      temp_search = temp_sub.search(num+']');
+      temp_search2 = temp_sub.indexOf(num-1+']');
+      temp_slice = temp_sub.slice(temp_search,temp_search2);
+      temp_sub = temp_sub.replace(temp_slice,'');
+
+      A_Room[reserve_count] = temp_slice;
+      reserve_count++;
+
+    }
+  //  alert(temp_sub);
+
+}
+for(var a=0;a<reserve_count;a++){
+   alert(A_Room[a]);
+}
+    /*
+    //temp_search = temp_sub.search( reserve_count+1 +']');
+    //temp_search2 = temp_sub.indexOf(reserve_count+2 +']',temp_search);
+    if(temp_search2 == -1){
+      alert("더이상 예약이 존재하지 않습니다.");
+      for(var a=0;a<reserve_count;a++){
+         alert(A_Room[a]);
+      }
+    }
     temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+  //  alert(temp_slice);
     temp_sub = temp_sub.replace(temp_slice,'');
+    alert(temp_sub);
 
     if(temp_slice ==''){
       //세이브를 하지 않음
@@ -399,7 +436,9 @@ else{
     }
 
     }
+    */
 
+/*
     // B룸
       temp_search =  save_data[day_search].search('수용');
       temp_search2 = save_data[day_search].lastIndexOf(']');
@@ -423,7 +462,7 @@ else{
       }
 
     }
-    // B룸
+    // c룸
       temp_search =  save_data[day_search].search('5인');
       temp_search2 = save_data[day_search].lastIndexOf(']');
       temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
@@ -447,6 +486,12 @@ else{
 
     }
 
+    for(var a=0;a<reserve_count;a++){
+       alert(A_Room[a]);
+       alert(B_Room[a]);
+       alert(C_Room[a]);
+    }
+    */
 
 }
 /*

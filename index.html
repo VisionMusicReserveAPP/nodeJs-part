@@ -380,9 +380,9 @@ else{
     temp_search =  save_data[day_search].search('예약');
     temp_search2 = save_data[day_search].indexOf('vision room');
     temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-3);
-    alert(temp_slice);
     temp_sub = temp_slice;
 
+    save_data[day_search] = save_data[day_search].replace(temp_slice,'');
 
     while(temp_search != -1){
     var num = temp_sub.slice(0,1);
@@ -407,92 +407,78 @@ else{
       reserve_count++;
 
     }
-  //  alert(temp_sub);
-
 }
-for(var a=0;a<reserve_count;a++){
-   alert(A_Room[a]);
-}
-    /*
-    //temp_search = temp_sub.search( reserve_count+1 +']');
-    //temp_search2 = temp_sub.indexOf(reserve_count+2 +']',temp_search);
-    if(temp_search2 == -1){
-      alert("더이상 예약이 존재하지 않습니다.");
-      for(var a=0;a<reserve_count;a++){
-         alert(A_Room[a]);
-      }
-    }
-    temp_slice = temp_sub.slice(temp_search,temp_search2+1);
-  //  alert(temp_slice);
-    temp_sub = temp_sub.replace(temp_slice,'');
-    alert(temp_sub);
-
-    if(temp_slice ==''){
-      //세이브를 하지 않음
-    }
-    else{
-      A_Room[reserve_count] = temp_slice;
-      reserve_count++;
-    }
-
-    }
-    */
-
-/*
-    // B룸
+//B룸
+      reserve_count = 0;//B룸에선 다시 O번째부터 시작
       temp_search =  save_data[day_search].search('수용');
-      temp_search2 = save_data[day_search].lastIndexOf(']');
-      temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
-
-      temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
+      temp_search2 = save_data[day_search].indexOf('room',temp_search);
+      temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-10);
+      temp_sub = temp_slice;
+      save_data[day_search] = save_data[day_search].replace(temp_slice,'');
 
       while(temp_search != -1){
+      var num = temp_sub.slice(0,1);
+       // 최종 기준이 되는 숫자
 
-      temp_search = temp_sub.search( reserve_count+1 +']');
-      temp_search2 = temp_sub.lastIndexOf(']');
-      temp_slice = temp_sub.slice(temp_search,temp_search2+1);
-      temp_sub = temp_sub.replace(temp_slice,'');
+      if(num == 1){
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.lastIndexOf(']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+        temp_sub = temp_sub.replace(temp_slice,'');
 
-      if(temp_slice ==''){
-        //세이브를 하지 않음
-      }
-      else{
         B_Room[reserve_count] = temp_slice;
         reserve_count++;
       }
+      else{
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.indexOf(num-1+']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2);
+        temp_sub = temp_sub.replace(temp_slice,'');
 
-    }
-    // c룸
+        B_Room[reserve_count] = temp_slice;
+        reserve_count++;
+
+      }
+}
+
+      reserve_count = 0;//C룸에선 다시 O번째부터 시작
+
       temp_search =  save_data[day_search].search('5인');
       temp_search2 = save_data[day_search].lastIndexOf(']');
-      temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
-
+      temp_slice = save_data[day_search].slice(temp_search+2,temp_search2+2);
+      alert(temp_slice);
       temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
 
       while(temp_search != -1){
+      var num = temp_sub.slice(0,1);
+       // 최종 기준이 되는 숫자
 
-      temp_search = temp_sub.search( reserve_count+1 +']');
-      temp_search2 = temp_sub.lastIndexOf(']');
-      temp_slice = temp_sub.slice(temp_search,temp_search2+1);
-      temp_sub = temp_sub.replace(temp_slice,'');
+      if(num == 1){
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.lastIndexOf(']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+      //  alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
 
-      if(temp_slice ==''){
-        //세이브를 하지 않음
-      }
-      else{
-        B_Room[reserve_count] = temp_slice;
+        C_Room[reserve_count] = temp_slice;
         reserve_count++;
       }
+      else{
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.indexOf(num-1+']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2);
+    //    alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
 
-    }
+        C_Room[reserve_count] = temp_slice;
+        reserve_count++;
 
-    for(var a=0;a<reserve_count;a++){
-       alert(A_Room[a]);
-       alert(B_Room[a]);
-       alert(C_Room[a]);
-    }
-    */
+      }
 
+
+}
+alert('C룸 예약 리스트: -'+C_Room[0]);
+alert('C룸 예약 리스트: -'+C_Room[1]);
 }
 /*
 고정 부분 바뀌지 않는다

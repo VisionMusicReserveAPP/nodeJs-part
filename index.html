@@ -198,7 +198,7 @@ var temp_count = ''; // 요일 숫자
 var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
-var day_search = 0;
+var day_search = 21;
 var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -275,7 +275,7 @@ if(temp_slice.lastIndexOf("0") == -1){
 //  alert(temp_slice);
 }
 
-// alert(temp_slice);
+alert(save_data[day_search]); // 9일이 없어졌음
 
 
 temp_search = save_data[day_search].search('최대인원 제한 예약');
@@ -299,17 +299,67 @@ if(temp_search == -1 ){
 
     if(temp_search2 == -1){ // c룸 예약이 없을경우
        alert('B룸은 있지만 c룸 예약이 없음');
-       temp_search2 = save_data[day_search].lastIndexOf(']');
-       temp_slice = save_data[day_search].slice(temp_search+9,temp_search2);
+       // B룸
+         temp_search =  save_data[day_search].search('수용');
+         temp_search2 = save_data[day_search].lastIndexOf(']');
+         temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
 
-       alert(temp_slice);
+         while(temp_search != -1){
+
+         temp_search = temp_slice.search( reserve_count+1 +']');
+         temp_search2 = temp_slice.lastIndexOf(']');
+         temp_slice = temp_slice.slice(temp_search,temp_search2+1);
+         temp_slice = temp_slice.replace(temp_slice,'');
+
+         if(temp_slice ==''){
+           //세이브를 하지 않음
+         }
+         else{
+           B_Room[reserve_count] = temp_slice;
+           reserve_count++;
+         }
+       }
+
     }
 
     if(temp_sub != -1){
       alert('C룸 예약이 존재');
-      temp_search2 = save_data[day_search].lastIndexOf(']');
-      temp_slice = save_data[day_search].slice(temp_search+2,temp_search2);
 
+      reserve_count = 0;//C룸에선 다시 O번째부터 시작
+
+      temp_search =  save_data[day_search].search('5인');
+      temp_search2 = save_data[day_search].lastIndexOf(']');
+      temp_slice = save_data[day_search].slice(temp_search+2,temp_search2+2);
+      temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
+
+      while(temp_search != -1){
+      var num = temp_sub.slice(0,1);
+       // 최종 기준이 되는 숫자
+
+      if(num == 1){
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.lastIndexOf(']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+      //  alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
+
+        C_Room[reserve_count] = temp_slice;
+        reserve_count++;
+      }
+      else{
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.indexOf(num-1+']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2);
+    //    alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
+
+        C_Room[reserve_count] = temp_slice;
+        reserve_count++;
+
+      }
+}
+    alert(C_Room[0]);
+    alert(C_Room[1]);
 
     }
   }
@@ -477,8 +527,10 @@ else{
 
 
 }
-alert('C룸 예약 리스트: -'+C_Room[0]);
-alert('C룸 예약 리스트: -'+C_Room[1]);
+
+alert(A_Room[0]);
+alert(A_Room[1]);
+
 }
 /*
 고정 부분 바뀌지 않는다
@@ -524,7 +576,7 @@ function to_date(){
 }
 
 function rental_reservation(){
-//비전 합주실 렌탈 예약
+  //비전 합주실 렌탈 예약
   accept_request();
 
   var temp_total = '';//임시로 받아 놓을 수 있는 변수
@@ -550,48 +602,47 @@ function rental_reservation(){
   //alert(temp_sub);
 
   //태그문자 제거
-for(var i = 0; i<100;i++){
-  temp_search = temp_total.search("<");
-  temp_search2 = temp_total.indexOf(">",temp_search);
-  temp_slice = temp_total.slice(temp_search,temp_search2+1);
+  for(var i = 0; i<100;i++){
+    temp_search = temp_total.search("<");
+    temp_search2 = temp_total.indexOf(">",temp_search);
+    temp_slice = temp_total.slice(temp_search,temp_search2+1);
 
-  temp_total = temp_total.replace(temp_slice, '');
-}
+    temp_total = temp_total.replace(temp_slice, '');
+  }
 
-temp_total = temp_total.replace('<','');
-temp_total = temp_total.replace('&nbsp;','');
+  temp_total = temp_total.replace('<','');
+  temp_total = temp_total.replace('&nbsp;','');
 
-alert(temp_total); //문자열만 남음
+  alert(temp_total); //문자열만 남음
 
-// 2] 1]순서 찾기 로직 만들기
-var logic_num = ']';
-var change_num = 1;
-//따로 내용을 저장할 배열 지정
-temp_search = temp_total.search(change_num + logic_num); // 1]
-temp_search2 = temp_total.lastIndexOf(']');
+  // 2] 1]순서 찾기 로직 만들기
+  var logic_num = ']';
+  var change_num = 1;
+  //따로 내용을 저장할 배열 지정
+  temp_search = temp_total.search(change_num + logic_num); // 1]
+  temp_search2 = temp_total.lastIndexOf(']');
 
-temp_compare = temp_total.search(']') + 1; // 아래서부터 위로 번호가 올라가는 형식 ] 앞에 있는 번수를 파악
-temp_compare_slice = temp_total.slice(temp_compare-3,temp_compare-1); //두자리 수 일 가능성을 고려
-temp_compare_slice = temp_compare_slice.replace('&nbsp;','');
+  temp_compare = temp_total.search(']') + 1; // 아래서부터 위로 번호가 올라가는 형식 ] 앞에 있는 번수를 파악
+  temp_compare_slice = temp_total.slice(temp_compare-3,temp_compare-1); //두자리 수 일 가능성을 고려
+  temp_compare_slice = temp_compare_slice.replace('&nbsp;','');
 
-alert(temp_compare_slice);
+  alert(temp_compare_slice);
 
-var temp_count = 0;
+  var temp_count = 0;
 
-while(temp_count != temp_compare_slice ){ //기준이 되는 compare_slice 와 temp_count를 비교
+  while(temp_count != temp_compare_slice ){ //기준이 되는 compare_slice 와 temp_count를 비교
 
-temp_search = temp_total.search(change_num + logic_num); // 1]
-temp_search2 = temp_total.lastIndexOf(']');
-temp_slice = temp_total.slice(temp_search,temp_search2+1); // 첫번째 장비 대여 항목 저장
-//alert(temp_slice); //1]을 포함한 문자열
-temp_total = temp_total.replace(temp_slice, '');
-alert(temp_total);
-temp_slice = temp_slice.replace(change_num + logic_num, '');
-alert(temp_slice); // 1]을 지운 문자열 이 문자열을 배열로 저장하기
+    temp_search = temp_total.search(change_num + logic_num); // 1]
+    temp_search2 = temp_total.lastIndexOf(']');
+    temp_slice = temp_total.slice(temp_search,temp_search2+1); // 첫번째 장비 대여 항목 저장
+    //alert(temp_slice); //1]을 포함한 문자열
+    temp_total = temp_total.replace(temp_slice, '');
+    alert(temp_total);
+    temp_slice = temp_slice.replace(change_num + logic_num, '');
+    alert(temp_slice); // 1]을 지운 문자열 이 문자열을 배열로 저장하기
 
-temp_count++;
-change_num++;
-
+    temp_count++;
+    change_num++;
 }
 }
 

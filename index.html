@@ -129,15 +129,17 @@ function find_vision_band(){
  to_date();
 
  var logic_num = '-';
- var change_num = lastdate;
+ //var change_num = lastdate;
+ var change_num = 12;
  var temp_count = 0;
 
- document.body.innerHTML = temp_total;
+ //document.body.innerHTML = temp_total;
 
 
  while(temp_count != lastdate ){ //기준이 되는 compare_slice 와 temp_count를 비교
 
  temp_search = temp_total.search(change_num + logic_num); // 30-
+// alert(temp_search);
  if(temp_search == -1){
    //alert(change_num);
    save_data[temp_count] = 'Not Found!';
@@ -146,15 +148,25 @@ function find_vision_band(){
 
 
  temp_search2 = temp_total.indexOf(change_num-1 + logic_num, temp_search);
-
  if(temp_search2 == -1){
     var a = 2;
-   while(temp_search2 == -1 ){
+   while(temp_search2 != -1 ){
+     temp_search2 = temp_total.indexOf(change_num-a + logic_num, temp_search);
+     if(temp_search2 == -1){
+       a++;
+     }
+     else{
+       alert(temp_search2);
+     }
+     /*
+        change_num--;
+        alert(temp_sub);
 
-   temp_search2 = temp_total.indexOf(change_num - a );
+   temp_search = temp_total.search(change_num + logic_num);
+   temp_search2 = temp_total.indexOf(change_num - a + logic_num );
    temp = change_num - a;
-   a--;
-
+   a++;
+*/
   }
  }
 
@@ -167,6 +179,7 @@ function find_vision_band(){
 
  temp_slice = temp_total.slice(temp_search,temp_search2);
  temp_total = temp_total.replace(temp_slice,'');
+
 
  //temp_search2 가 문제
 
@@ -186,6 +199,13 @@ load_data();
 }
 
 function load_data(){
+/*
+  for(var a = 0; a<temp_count;a++){
+    document.body.innerHTML += save_data[a];
+  }
+*/
+document.body.innerHTML = save_data[18];
+alert(save_data[21]);
 
 var temp_total = '';
 var temp_search = ''; //
@@ -230,7 +250,7 @@ for(var i = 0; i<6;i++){
   }
 
 }
-document.body.innerHTML = save_data[day_search];
+//document.body.innerHTML = save_data[day_search];
 
 //먼저 오픈시간과 A,B,C 룸을 나눔
 

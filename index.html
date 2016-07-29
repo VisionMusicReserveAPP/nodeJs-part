@@ -23,6 +23,7 @@ var save_data = new Array(lastdate);
 var A_Room = new Array(reserve_count);
 var B_Room = new Array(reserve_count);
 var C_Room = new Array(reserve_count);
+var week = ['월','화','수','목','금','토','일'];
 var reserve_count = 0;
 
 var today = '';
@@ -129,14 +130,15 @@ function find_vision_band(){
  to_date();
 
  var logic_num = '-';
- //var change_num = lastdate;
- var change_num = 12;
+ var change_num = lastdate;
+ //var change_num = 14;
  var temp_count = 0;
 
- //document.body.innerHTML = temp_total;
+document.body.innerHTML = temp_total;
 
 
  while(temp_count != lastdate ){ //기준이 되는 compare_slice 와 temp_count를 비교
+
 
  temp_search = temp_total.search(change_num + logic_num); // 30-
 // alert(temp_search);
@@ -146,44 +148,36 @@ function find_vision_band(){
 
  }
 
-
  temp_search2 = temp_total.indexOf(change_num-1 + logic_num, temp_search);
- if(temp_search2 == -1){
-    var a = 2;
-   while(temp_search2 != -1 ){
-     temp_search2 = temp_total.indexOf(change_num-a + logic_num, temp_search);
-     if(temp_search2 == -1){
-       a++;
-     }
-     else{
-       alert(temp_search2);
-     }
-     /*
-        change_num--;
-        alert(temp_sub);
 
-   temp_search = temp_total.search(change_num + logic_num);
-   temp_search2 = temp_total.indexOf(change_num - a + logic_num );
-   temp = change_num - a;
-   a++;
-*/
-  }
- }
+ if(temp_search2 == -1){
+   for(var a=0;a<lastdate;a++){
+     var b = 2;
+     temp_search2 = temp_total.indexOf(change_num-b,temp_search);
+     while(temp_search2 == -1){ // 2이상 차이날 경우
+        b++;
+        temp_search2 = temp_total.indexOf(change_num-b,temp_search);
+        if(temp_search == -1){
+          change_num = change_num-b+1;
+          break;
+        }
+      }
+     }
+   }
+   //change_num = change_num-a+1;
 
  if(change_num == 1){ //마지막 번호가 남을경우
-   temp_search = temp_total.search(change_num + logic_num); // 30-
-   temp_search2 = temp_total.lastIndexOf(']')+1;
+     temp_search = temp_total.search(change_num + logic_num); // 30-
+     temp_search2 = temp_total.lastIndexOf(']')+1;
 
- }
+   }
+
 //0번째 숫자를 기준으로 해결
 
  temp_slice = temp_total.slice(temp_search,temp_search2);
  temp_total = temp_total.replace(temp_slice,'');
 
-
- //temp_search2 가 문제
-
- //한자리수 날짜들은 두자리수에 묻히는 불상사 발생
+//alert(temp_total);
 
  save_data[temp_count] = temp_slice;
 
@@ -199,12 +193,12 @@ load_data();
 }
 
 function load_data(){
-/*
+
   for(var a = 0; a<temp_count;a++){
-    document.body.innerHTML += save_data[a];
+    alert(save_data[a]);
   }
-*/
-document.body.innerHTML = save_data[18];
+
+//document.body.innerHTML = save_data[];
 alert(save_data[21]);
 
 var temp_total = '';
@@ -215,7 +209,6 @@ var temp_sub = ''; // 요일을 비교할 내용
 var temp_count = ''; // 요일 숫자
 
 
-var week = ['월','화','수','목','금','토','일'];
 var day_decision = '';
 
 var day_search = 21;

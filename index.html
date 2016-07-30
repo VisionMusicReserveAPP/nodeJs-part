@@ -151,17 +151,21 @@ document.body.innerHTML = temp_total;
  temp_search2 = temp_total.indexOf(change_num-1 + logic_num, temp_search);
 
  if(temp_search2 == -1){
-   for(var a=0;a<lastdate;a++){
+   //for(var a=0;a<lastdate;a++){
      var b = 2;
-     temp_search2 = temp_total.indexOf(change_num-b,temp_search);
-     while(temp_search2 == -1){ // 2이상 차이날 경우
-        b++;
-        temp_search2 = temp_total.indexOf(change_num-b,temp_search);
-        if(temp_search == -1){
-          change_num = change_num-b+1;
-          break;
-        }
-      }
+     temp_search2 = temp_total.indexOf(change_num-b+ logic_num,temp_search);
+     //alert(temp_search2);
+    if(temp_search2 == -1){
+     for(var a=1;a<10;a++){
+       b++;
+       temp_search2 = temp_total.indexOf(change_num-b+ logic_num,temp_search);
+       if(temp_search2 != -1){
+         break;
+       }
+       else{
+         continue;  // ㅠㅠ해결!!
+       }
+     }
      }
    }
    //change_num = change_num-a+1;
@@ -194,12 +198,12 @@ load_data();
 
 function load_data(){
 
-  for(var a = 0; a<temp_count;a++){
+  for(var a = 0; a<30;a++){
     alert(save_data[a]);
   }
 
 //document.body.innerHTML = save_data[];
-alert(save_data[21]);
+//alert(save_data[a]);
 
 var temp_total = '';
 var temp_search = ''; //

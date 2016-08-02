@@ -29,7 +29,7 @@ var reserve_count = 0;
 var today = '';
 var month = '';
 var lastdate = '';
-var Opentime ='';
+var Opentime = new Array(reserve_count); // 오픈 시간이 적혀있는 경우 제시
 var temp = '';
 
 var xmlData = ''; // xml로 데이터를 저장
@@ -198,9 +198,6 @@ load_data();
 
 function load_data(){
 
-  for(var a = 0; a<30;a++){
-    alert(save_data[a]);
-  }
 
 //document.body.innerHTML = save_data[];
 //alert(save_data[a]);
@@ -215,7 +212,7 @@ var temp_count = ''; // 요일 숫자
 
 var day_decision = '';
 
-var day_search = 21;
+var day_search = 3;
 var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -279,6 +276,7 @@ if(temp_slice.lastIndexOf("0") == -1){
 
   else{
     alert('문여는 시간이 정해지지 않았습니다.');
+    Opentime[day_search] = "문 여는 시간이 정해지지 않았습니다.";
   }
 
 } else {
@@ -288,17 +286,16 @@ if(temp_slice.lastIndexOf("0") == -1){
   temp_slice = temp_slice.slice(temp_search+1,temp_search2+1);
   while(temp_slice.search('&nbsp;') != -1){
   temp_slice = temp_slice.replace('&nbsp;','');
+} //문여는 시간을 저장할 공간이 필요
+  Opentime[day_search] = temp_slice;
+  alert(Opentime[day_search]);
 }
-//  alert(temp_slice);
-}
-
-alert(save_data[day_search]); // 9일이 없어졌음
-
+  alert(save_data[day_search]);
 
 temp_search = save_data[day_search].search('최대인원 제한 예약');
 temp_search2 = save_data[day_search].search('7인수용');
 temp_sub = save_data[day_search].search('5인');
-//alert(temp_search);
+
 
 // A룸 예약이 없을 경우
 if(temp_search == -1 ){
@@ -375,8 +372,8 @@ if(temp_search == -1 ){
 
       }
 }
-    alert(C_Room[0]);
-    alert(C_Room[1]);
+    //alert(C_Room[0]);
+    //alert(C_Room[1]);
 
     }
   }
@@ -545,8 +542,8 @@ else{
 
 }
 
-alert(A_Room[0]);
-alert(A_Room[1]);
+//alert(A_Room[0]);
+//alert(A_Room[1]);
 
 }
 /*
@@ -560,13 +557,21 @@ c룸 - 5인
 
 
 
-//var xmlData += '<?xml version='+"1.0"+' encoding='+'UTF-8'+'?>';
+var xmlData = '';
+xmlData += '<reservation>';
+xmlData += '<item>' ; // 가장 상위가 날짜
+xmlData += '<day>' +  (31 - day_search) + "일 예약 현황"  + '</day>';
+xmlData += '<open>' + Opentime[day_search] + '</open>';
+xmlData += '</item>';
+xmlData += '</reservation>';
 
 
 
-//go_function = save_data[day_search];//저장을 하기전 매개변수에다 저장
 
-//writefile(go_function);
+
+go_function = xmlData;//저장을 하기전 매개변수에다 저장
+
+writefile(go_function);
 
 
 

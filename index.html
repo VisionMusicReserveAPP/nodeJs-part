@@ -21,8 +21,11 @@ var except_tag = '';
 var seperate_result = '';
 var save_data = new Array(lastdate);
 var A_Room = new Array(reserve_count);
+var A_count = '';     // reserve_count는 값이 초기화 되기 때문에 A룸만 따로 저장하는 변수가 필요
 var B_Room = new Array(reserve_count);
+var B_count = '';
 var C_Room = new Array(reserve_count);
+var C_count = '';
 var week = ['월','화','수','목','금','토','일'];
 var reserve_count = 0;
 
@@ -212,7 +215,7 @@ var temp_count = ''; // 요일 숫자
 
 var day_decision = '';
 
-var day_search = 3;
+var day_search = 10;
 var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -288,9 +291,9 @@ if(temp_slice.lastIndexOf("0") == -1){
   temp_slice = temp_slice.replace('&nbsp;','');
 } //문여는 시간을 저장할 공간이 필요
   Opentime[day_search] = temp_slice;
-  alert(Opentime[day_search]);
+  //alert(Opentime[day_search]);
 }
-  alert(save_data[day_search]);
+  //alert(save_data[day_search]);
 
 temp_search = save_data[day_search].search('최대인원 제한 예약');
 temp_search2 = save_data[day_search].search('7인수용');
@@ -333,6 +336,7 @@ if(temp_search == -1 ){
            reserve_count++;
          }
        }
+       B_count = reserve_count; // b룸의 count만 받는 변수
 
     }
 
@@ -372,8 +376,7 @@ if(temp_search == -1 ){
 
       }
 }
-    //alert(C_Room[0]);
-    //alert(C_Room[1]);
+    C_count = reserve_count; // c룸의 count만 받는 변수
 
     }
   }
@@ -381,6 +384,93 @@ if(temp_search == -1 ){
 } // A,C룸 예약이 있을 경우
   else if(temp_search2 == -1 ){
   alert('B룸 예약이 없음');
+
+  // A룸 부터 나눔, 먼저 크게 한번 나누고 항목별로 나눠보기
+    temp_search =  save_data[day_search].search('예약');
+    temp_search2 = save_data[day_search].indexOf('vision room');
+    temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-3);
+
+
+    temp_sub = temp_slice;
+
+    while(temp_search != -1){
+
+    temp_search = temp_sub.search( reserve_count+1 +']');
+    temp_search2 = temp_sub.indexOf( reserve_count+2 +']');
+
+    //!!큰수부터 작은수로 내려감
+    //]가 없는 경우 따로 저장하는 방안 모색해야함
+
+    if(temp_search2 == -1 ){
+      var a = 3;
+      while(temp_search2 == -1 ){
+        alert('d');
+      temp_search2 = temp_sub.indexOf( reserve_count+a +']');
+      a++;
+      if(temp_search2 != -1){
+        alert(temp_search2);
+        break;
+      }
+      else{
+        continue;
+      }
+    }
+    }
+
+    temp_slice = temp_sub.slice(temp_search,temp_search2);
+    temp_sub = temp_sub.replace(temp_slice,'');
+    //]가 없는 예약의 경우 다름으로 넘어갈수 없음 에러 발생
+    //alert("temp_sub:"+temp_sub);
+
+    if(temp_slice ==''){
+      //세이브를 하지 않음
+    }
+    else{
+      A_Room[reserve_count] = temp_slice;
+      reserve_count++;
+    }
+
+    }
+    A_count = reserve_count; // A룸의 count만 받는 변수
+
+    if(temp_sub != -1){ // c룸 예약이 존재
+      reserve_count = 0;//C룸에선 다시 O번째부터 시작
+
+      temp_search =  save_data[day_search].search('5인');
+      temp_search2 = save_data[day_search].lastIndexOf(']');
+      temp_slice = save_data[day_search].slice(temp_search+2,temp_search2+2);
+      alert(temp_slice);
+      temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
+
+      while(temp_search != -1){
+      var num = temp_sub.slice(0,1);
+       // 최종 기준이 되는 숫자
+
+      if(num == 1){
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.lastIndexOf(']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+      //  alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
+
+        C_Room[reserve_count] = temp_slice;
+        reserve_count++;
+      }
+      else{
+        temp_search = temp_sub.search(num+']');
+        temp_search2 = temp_sub.indexOf(num-1+']');
+        temp_slice = temp_sub.slice(temp_search,temp_search2);
+    //    alert(temp_slice);
+        temp_sub = temp_sub.replace(temp_slice,'');
+
+        C_Room[reserve_count] = temp_slice;
+        reserve_count++;
+
+      }
+}
+C_count = reserve_count; // C룸의 count만 받는 변수
+
+}
 
 } // A, B룸 예약이 있을 경우
   else if(temp_sub == -1){
@@ -411,14 +501,18 @@ if(temp_search == -1 ){
   }
 
   }
+  A_count = reserve_count; // A룸의 count만 받는 변수
 
 
 // B룸
+  reserve_count = 0;
   temp_search =  save_data[day_search].search('수용');
   temp_search2 = save_data[day_search].lastIndexOf(']');
   temp_slice = save_data[day_search].slice(temp_search+4,temp_search2+2);
 
   temp_sub = temp_slice; //일시적으로 temp_sub에 한번 잘라놨던 문자열을 저장
+
+  alert(temp_sub);
 
   while(temp_search != -1){
 
@@ -426,17 +520,18 @@ if(temp_search == -1 ){
   temp_search2 = temp_sub.lastIndexOf(']');
   temp_slice = temp_sub.slice(temp_search,temp_search2+1);
   temp_sub = temp_sub.replace(temp_slice,'');
-
+  //alert(temp_slice);
   if(temp_slice ==''){
     //세이브를 하지 않음
   }
   else{
     B_Room[reserve_count] = temp_slice;
+    alert(B_Room[reserve_count]);
     reserve_count++;
   }
 
 }
-
+  B_count = reserve_count; // b룸의 count만 받는 변수
 }
 else{
   alert('모든 방 예약이 존재');
@@ -445,6 +540,7 @@ else{
     temp_search2 = save_data[day_search].indexOf('vision room');
     temp_slice = save_data[day_search].slice(temp_search+7,temp_search2-3);
     temp_sub = temp_slice;
+    alert(temp_sub);
 
     save_data[day_search] = save_data[day_search].replace(temp_slice,'');
 
@@ -456,6 +552,7 @@ else{
       temp_search = temp_sub.search(num+']');
       temp_search2 = temp_sub.lastIndexOf(']');
       temp_slice = temp_sub.slice(temp_search,temp_search2+1);
+      alert(temp_slice);
       temp_sub = temp_sub.replace(temp_slice,'');
 
       A_Room[reserve_count] = temp_slice;
@@ -471,6 +568,9 @@ else{
       reserve_count++;
 
     }
+    A_count = reserve_count; // A룸의 count만 받는 변수
+    alert(A_Room[0]);
+    alert(A_Room[1]);
 }
 //B룸
       reserve_count = 0;//B룸에선 다시 O번째부터 시작
@@ -504,6 +604,7 @@ else{
 
       }
 }
+      B_count = reserve_count;
 
       reserve_count = 0;//C룸에선 다시 O번째부터 시작
 
@@ -538,12 +639,8 @@ else{
         reserve_count++;
 
       }
-
-
 }
-
-//alert(A_Room[0]);
-//alert(A_Room[1]);
+C_count = reserve_count; // C룸의 count만 받는 변수
 
 }
 /*
@@ -557,13 +654,28 @@ c룸 - 5인
 
 
 
-var xmlData = '';
-xmlData += '<reservation>';
-xmlData += '<item>' ; // 가장 상위가 날짜
-xmlData += '<day>' +  (31 - day_search) + "일 예약 현황"  + '</day>';
-xmlData += '<open>' + Opentime[day_search] + '</open>';
-xmlData += '</item>';
-xmlData += '</reservation>';
+  var xmlData = '';
+
+  xmlData += '<reservation>';
+  xmlData += '<item>' ; // 가장 상위가 날짜
+  xmlData += '<day>' +  (31 - day_search) + "일 예약 현황"  + '</day>';
+  xmlData += '<open>' + Opentime[day_search] + '</open>';
+  alert(A_count);
+  alert(A_Room[0]);
+  for(var a=0;a<A_count;a++){
+    xmlData += '<A_Room>' + A_Room[a] + '</A_Room>';
+  }
+
+  for(var a=0;a<B_count;a++){
+    xmlData += '<B_Room>' + B_Room[a] + '</B_Room>';
+  }
+
+  for(var a=0;a<C_count;a++){
+    xmlData += '<C_Room>' + C_Room[a] + '</C_Room>';
+  }
+
+  xmlData += '</item>';
+  xmlData += '</reservation>';
 
 
 

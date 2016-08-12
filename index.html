@@ -1,51 +1,79 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
 <title>jQuery Mobile 웹 응용 프로그램</title>
-<link href="jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css"/>
-<link href="jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css"/>
-<script src="jquery-1.6.4.min.js" type="text/javascript"></script>
-<script src="jquery.mobile-1.0.min.js" type="text/javascript"></script>
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
- //카카오 sdk 이용
+<link href="jquery.mobile.theme-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+<link href="jquery.mobile.structure-1.4.5.min" rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="jquery.mobile-1.4.5.min" type="text/javascript">
+</script>
 
-<meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+<link  href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
 
 
-</head> 
-<body> 
+<script src="kakao.min.js"></script>
+<style type="text/css">
+.header{ background: #f02f5c }
 
-<div data-role="page" id="main">
-	<div class="ui-bar-a" data-role="header" data-theme="b" id="main_header">
-		<h1 class="ui-bar-a">Vision 합주실</h1>
-	</div>
-	<div data-role="content">	
-    	<a id="custom-login-btn" href="javascript:loginWithKakao()">
-<img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="300"/>
-</a>
-<script type='text/javascript'>
-  //<![CDATA[
-    // 사용할 앱의 JavaScript 키를 설정해 주세요.
-    Kakao.init('8b249a631dd007513593ef7c6c5b7166');
-    function loginWithKakao() {
-      // 로그인 창을 띄웁니다.
-      Kakao.Auth.login({
-        success: function(authObj) {
-          alert(JSON.stringify(authObj));
-        },
-        fail: function(err) {
-          alert(JSON.stringify(err));
+
+</style>
+<script language="JavaScript">
+<!--
+var xmlHttp;
+
+function createXMLHttpRequest() {
+    if(window.ActiveXObject) {
+        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+    } else if(window.XMLHttpRequest) {
+        xmlHttp = new XMLHttpRequest();
+    }
+}
+
+function startRequest() {
+    createXMLHttpRequest();
+    xmlHttp.onreadystatechange = handleStateChange;
+    xmlHttp.open("GET", "test1.xml", true);
+    xmlHttp.send(null);
+}
+
+function handleStateChange() {
+    if(xmlHttp.readyState == 4) {
+        if(xmlHttp.status == 200) {
+            alert("서버로부터의 응답 : " + xmlHttp.responseText);
         }
-      });
-    };
-  //]]>
+    }
+}
+//-->
 </script>
 
 
-    
-		
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.4.5, minimum-scale=1.4.5, width=device-width"/>
+
+
+</head>
+<body>
+
+<div data-role="page" id="main">
+	<div class="header" data-role="header" data-theme="b" id="main_header">
+		<h1 class = >Vision 합주실</h1>
+	</div>
+	<div data-role="content">
+    <form action="#">
+    <input type="button" value="간단한 비동기 요청 시작" onclick="startRequest();"/>
+</form>
+   <div class="fotorama">
+  <a href="http://youtube.com/watch?v=C3lWwBslWqg">소개영상</a>
+</div>
+
+ 	</div>
+
+
+
+
+
 	</div>
 	<div data-role="footer">
 		<h4>페이지 바닥글</h4>
@@ -56,8 +84,8 @@
 	<div data-role="header">
 		<h1>2페이지</h1>
 	</div>
-	<div data-role="content">	
-		내용		
+	<div data-role="content">
+		내용
 	</div>
 	<div data-role="footer">
 		<h4>페이지 바닥글</h4>
@@ -68,8 +96,8 @@
 	<div data-role="header">
 		<h1>3페이지</h1>
 	</div>
-	<div data-role="content">	
-		내용		
+	<div data-role="content">
+		내용
 	</div>
 	<div data-role="footer">
 		<h4>페이지 바닥글</h4>
@@ -80,8 +108,8 @@
 	<div data-role="header">
 		<h1>4페이지</h1>
 	</div>
-	<div data-role="content">	
-		내용		
+	<div data-role="content">
+		내용
 	</div>
 	<div data-role="footer">
 		<h4>페이지 바닥글</h4>

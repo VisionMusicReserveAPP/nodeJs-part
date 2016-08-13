@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title> 합주실 예약 </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel ="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <Script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+  <script>
+  var melon ='';
+
+  function creatRequest(){
+    var request;
+
+    try{
+      request = new XMLHttpRequest();
+    }catch(exception){
+      try{
+        request = new ActiveXObject('Msxml2.XMLHTTP');
+      } catch(innerException) {
+        request = new ActiveXObject('Microsoft.XMLHTTP');
+      }
+    }
+
+    return request;
+  }
+
+  function melonchart(){
+    var request = new creatRequest();
+
+    request.open('GET','http://apis.skplanetx.com/melon/charts/realtime?count=10&page=1&version=1&appKey=f2ed03f2-7798-3cc3-a763-72aee3d29bdb&format=xml',false);
+
+    request.send();
+
+    alert(request.responseText);
+
+    melon = request.responseText;
+
+  }
+
+
+
+  function melonsearch(){
+    var request = new creatRequest();
+    var keyword_text = encodeURIComponent($('#keyword_text').val());
+    request.open('GET','http://apis.skplanetx.com/melon/songs?version=1&page=1&count=10&searchKeyword='+keyword_text+'&appKey=f2ed03f2-7798-3cc3-a763-72aee3d29bdb&format=xml',false);
+
+    request.send();
+
+    alert(request.responseText);
+
+    melon = request.responseText;
+
+  }
+
+  $(document).ready(function(){
+      $('#showchart').hide();
+      $('#search').hide();
+
+    $('#chart').click(function (event){
+      melonchart();
+      $('#chart').hide();
+      $('#showchart').show();
+      $('#showchart').append(melon);
+    });
+
+    $('#search_music').click(function (event){
+      $('#search').show();
+      $('#search_music').hide();
+    });
+
+
+
+  });
+
+  </script>
+
+
+  </head>
+  <div data-role ="page" id="main">
+    <div date-role ="header" data-theme="b" data-position="inline">
+      <h2>예약 확인 체계</h2>
+    </div>
+    <div data-role="content">
+      <ul data-role="listview" data-inset="true">
+        <li><a href= "#reservation">
+          <img src="reservation.png" alt="" />
+          <h3>예약 확인</h3></a>
+        </li>
+        <li><a href ="#location">
+          <img src="location.png" alt="" />
+          <h3>위치 확인</h3></a>
+        </li>
+        <li><a href ="#music">
+          <img src="music.png" alt="" />
+          <h3>음악 검색</h3></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div data-role="page" id="reservation" >
+    <div data-role="header" data-theme="b">
+  <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
+      <h1> 예약 확인 </h1>
+    </div>
+    <div data-role="content">
+    </div>
+    <div data-role="footer">
+
+    </div>
+  </div>
+ <div data-role="page" id="location" >
+    <div data-role="header" data-theme="b">
+  <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
+      <h1> 위치 확인 </h1>
+    </div>
+    <div data-role="content">
+    <div id="staticMap" style="width:600px;height:350px;"></div>
+
+    </div>
+    <div data-role="footer">
+
+    </div>
+  </div>
+
+  <div data-role="page" id="music" >
+     <div data-role="header" data-theme="b">
+   <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
+       <h1> 멜론 실시간 차트 확인 </h1>
+     </div>
+     <div data-role="content">
+    <li id="chart" >
+      <img src="chart.png" alt=""/>
+      <p>멜론 TOP 차트</p>
+    </li>
+     <div id="showchart">
+
+     </div>
+
+     <li id="search_music" >
+       <img src="search.png" alt=""/>
+       <p>음악 검색</p>
+     </li>
+
+     <div id="search">
+       <form id ="search_form">
+         <label for="keyword">음악검색</label>
+         <input type="text" id="keyword_text" />
+         <input type="button" id="keyword_button" value="검색" onclick="melonsearch()"/>
+       </form>
+
+     </div>
+
+
+     </div>
+
+     <div data-role="footer">
+
+     </div>
+   </div>
+
+
+
+</body>
+</html>

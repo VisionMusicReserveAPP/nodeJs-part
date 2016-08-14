@@ -58,6 +58,8 @@
       $('#showchart').hide();
       $('#search').hide();
 
+
+
     $('#chart').click(function (event){
       melonchart();
       $('#chart').hide();
@@ -106,59 +108,63 @@
     </div>
     <div data-role="content">
     </div>
-    <div data-role="footer">
+    <div data-role="footer" data-theme="b">
 
     </div>
   </div>
+
+
+
  <div data-role="page" id="location" >
     <div data-role="header" data-theme="b">
   <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
-      <h1> 위치 확인 </h1>
+      <h1> 찾아오시는 길 </h1>
     </div>
+
     <div data-role="content">
-    <div id="staticMap" style="width:600px;height:350px;"></div>
+      <div data-role="collapsible-set">
+
+      <div data-role="collapsible">
+        <h1>약도 보기</h1>
+      <a href="http://map.daum.net/?urlX=493930&urlY=1107111&urlLevel=3&map_type=TYPE_MAP&map_hybrid=false&SHOWMARK=true" target="_blank"><span style="background:#000;position:absolute;width:557px;opacity:.7;filter:alpha(opacity=70);color:#fff;overflow:hidden;font:12px/1.5 Dotum, '돋움', sans-serif;text-decoration:none;padding:7px 0px 0px 10px; height: 24px;">지도를 클릭하시면 위치정보를 확인하실 수 있습니다.</span><img width="565" height="308" src="http://map2.daum.net/map/mapservice?MX=493930&MY=1107111&SCALE=2.5&IW=565&IH=308&COORDSTM=WCONGNAMUL" style="border:1px solid #ccc"></a>
+      </div>
+
+      <div data-role="collapsible">
+       <h1 >로드뷰</h1>
+       <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0" name="daumFlashTarget" width="500" height="350" id="daumFlashTarget" style="visibility: visible;">
+       <param name="classid" value="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+       <param name="movie"  value="http://dmaps.daum.net/apis/roadview2.0/RoadViewLite.swf?v=1471173497753">
+       <param name="src" value="http://dmaps.daum.net/apis/roadview2.0/RoadViewLite.swf?v=1471173497753">
+	     <param name="allowScriptAccess" value="always">
+	     <param name="wmode" value="opaque">
+	     <param name="bgcolor" value="#000000">
+	     <param name="flashvars" value="serviceName=roadviewLite&bShowRedirectionButton=false&disableSmartJump=false&caption=%EC%84%9C%EC%9A%B8%20%EB%8F%99%EC%9E%91%EA%B5%AC%20%EC%82%AC%EB%8B%B9%EB%8F%99&width=400&height=350&pan=56&tilt=8&panoX=493897&panoY=1107088&panoId=1048450161&zoom=0&storeId=">
+	     <embed src="http://dmaps.daum.net/apis/roadview2.0/RoadViewLite.swf?v=1471173497753" loop="false" menu="false" quality="best" bgcolor="#000000" width="500" height="400" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="serviceName=roadviewLite&bShowRedirectionButton=false&disableSmartJump=false&caption=%EC%84%9C%EC%9A%B8%20%EB%8F%99%EC%9E%91%EA%B5%AC%20%EC%82%AC%EB%8B%B9%EB%8F%99&width=500&height=350&pan=56&tilt=8&panoX=493897&panoY=1107088&panoId=1048450161&zoom=0&storeId=" wmode="opaque" ></embed>
+     </object>
+     </div>
+
+     <div data-role="collapsible">
+       <h1>지도앱에서 길찾기</h1>
+       <button id="searchLink_0" style='background: url("http://m1.daumcdn.net/localimg/localimages/07/postcode/2015/mobile/m480/ico_comm_02.png") no-repeat -58px 0px / 230px 280px; margin: 0px; padding: 0px; border: 0px currentColor; border-image: none; width: 54px; height: 54px; overflow: hidden; display: inline-block; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-background-size: 230px 280px;'><span style="left: -9999px; width: 1px; height: 1px; line-height: 0; text-indent: -9999px; overflow: hidden; font-size: 0px; display: inline-block; position: absolute; opacity: 0;">지도앱에서 길찾기</span></button>
+       </button>
+     </div>
+
+     <div data-role="collapsible">
+       <h1>지도앱에서 보기</h1>
+       <button id="mapLink_0" style='background: url("http://m1.daumcdn.net/localimg/localimages/07/postcode/2015/mobile/m480/ico_comm_02.png") no-repeat -116px 0px / 230px 280px; margin: 0px; padding: 0px; border: 0px currentColor; border-image: none; width: 54px; height: 54px; overflow: hidden; display: inline-block; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-background-size: 230px 280px;'><span style="left: -9999px; width: 1px; height: 1px; line-height: 0; text-indent: -9999px; overflow: hidden; font-size: 0px; display: inline-block; position: absolute; opacity: 0;">지도앱에서 보기</span></button>
+      </button>
+    </div>
+
+    <div data-role="collapsible">
+      <h1>다음에서 길찾기</h1>
+      <iframe src="https://m.map.daum.net/actions/detailMapView?id=17102981&q=%EB%B9%84%EC%A0%84%ED%95%A9%EC%A3%BC%EC%8B%A4" width="500" height="400" frameborder="0" scrolling="yes"> 이 브라우저는 iframe을 지원하지 않습니다. </iframe>
+    </div>
 
     </div>
-    <div data-role="footer">
+    </div>
+    <div data-role="footer" data-theme="b">
 
     </div>
-  </div>
-
-  <div data-role="page" id="music" >
-     <div data-role="header" data-theme="b">
-   <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
-       <h1> 멜론 실시간 차트 확인 </h1>
-     </div>
-     <div data-role="content">
-    <li id="chart" >
-      <img src="chart.png" alt=""/>
-      <p>멜론 TOP 차트</p>
-    </li>
-     <div id="showchart">
-
-     </div>
-
-     <li id="search_music" >
-       <img src="search.png" alt=""/>
-       <p>음악 검색</p>
-     </li>
-
-     <div id="search">
-       <form id ="search_form">
-         <label for="keyword">음악검색</label>
-         <input type="text" id="keyword_text" />
-         <input type="button" id="keyword_button" value="검색" onclick="melonsearch()"/>
-       </form>
-
-     </div>
-
-
-     </div>
-
-     <div data-role="footer">
-
-     </div>
-   </div>
 
 
 

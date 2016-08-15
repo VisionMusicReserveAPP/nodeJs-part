@@ -11,8 +11,35 @@
   <link rel="stylesheet" type="text/css" href="./css/common.css" />
   <script>
   var melon ='';
+  function xmlparsing(){
+    var xmlDoc = null;
+    if(window.ActiveXObject){
+      //IE
+      xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+    }
+    else if(document.implementation.createDocument){
+      xmlDoc = document.implementation.createDocument("","",null);
+    }
+    else{
+      alert('xml을 사용못하는 브라우저');
+    }
 
-  function creatRequest(){
+    if(xmlDoc != null){
+      xmlDoc.async = false;
+      xmlDoc.load("data.xml");
+
+      var x  = xmlDoc.getElementByTagName('day');
+      for(i = 0 ; i<x.length;i++){
+        var day = days[i].childNodes[0].nodeValue;
+        $('#showdata').append(day);
+      }
+    }
+
+  }
+
+
+
+  function createRequest(){
     var request;
 
     try{
@@ -38,6 +65,32 @@
     alert(request.responseText);
 
     melon = request.responseText;
+
+  }
+
+  function load_data(){
+    var request = new createRequest();
+
+    request.open('GET','data.xml',false);
+    request.send();
+
+  //  alert(request.responseXML);
+
+    var xml = request.responseXML;
+
+    var days = xml.getElementsByTagName('day');
+    var opens = xml.getElementsByTagName('open');
+    var reservations = xml.getElementsByTagName('reservation');
+
+    for(var i =0;i<days.length;i++){
+      var day = days[i].childNodes[0].nodeValue;
+      var open = opens[i].childNodes[0].nodeValue;
+      var reservation = reservations[i].childNodes[0].nodeValue;
+
+      //배열로 저장 하기 json형식으로 
+    }
+
+
 
   }
 
@@ -76,7 +129,9 @@
       $('#search_music').hide();
     });
 
-    $('#')
+    $('#reservation_btn').click(function(event){
+      load_data();
+    });
 
 
 
@@ -92,7 +147,7 @@
     </div>
     <div data-role="content">
       <ul data-role="listview" data-inset="true">
-        <li><a href= "#reservation">
+        <li id="reservation_btn"><a href= "#reservation">
           <img src="reservation.png" alt="" />
           <h3>예약 확인</h3></a>
         </li>
@@ -117,6 +172,8 @@
       <h1> 예약 확인 </h1>
     </div>
     <div data-role="content">
+      <div id="showdata">
+      </div>
     </div>
     <div data-role="footer" data-theme="b">
 
@@ -189,7 +246,7 @@
 
       </div>
       <div data-role="footer" data-theme="b">
-              <button id="btnWrite">글쓰기</button>
+            <button id="btnWrite">글쓰기</button>
       </div>
     </div>
 

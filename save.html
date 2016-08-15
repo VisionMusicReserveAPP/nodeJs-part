@@ -34,6 +34,7 @@ var month = '';
 var lastdate = '';
 var Opentime = new Array(reserve_count); // 오픈 시간이 적혀있는 경우 제시
 var temp = '';
+var day_search = 1;
 
 var xmlData = ''; // xml로 데이터를 저장
 
@@ -44,7 +45,7 @@ function writefile(go_function){
   try
   {
     var opener = new ActiveXObject("Scripting.FileSystemObject");
-    var file = opener.OpenTextFile('C:\\node\\public\\test1.txt',2,true);
+    var file = opener.OpenTextFile('C:\\node\\public\\data.xml',2,true);
 
     file.WriteLine(go_function);
 
@@ -215,7 +216,6 @@ var temp_count = ''; // 요일 숫자
 
 var day_decision = '';
 
-var day_search = 1;
 var logic_num = '-';
 
 temp_sub = save_data[day_search].search(logic_num);
@@ -247,23 +247,61 @@ for(var i = 0; i<6;i++){
   }
 
 }
-
-  Open(day_search);
-
-
-  var xmlData = '';
-
-  xmlData += '<VISION>';
-  xmlData += '<item>' ; // 가장 상위가 날짜
-  xmlData += '<day>' +  (31 - day_search) + "일 예약 현황"  + '</day>';
-  xmlData += '<open>' + Opentime[day_search] + '</open>';
-  alert(save_data[day_search]);
-  xmlData += '<reservation>' + save_data[day_search] + '</reservation>';
+/*
+  for(var a=0; a<32;a++){
+  //  alert(save_data[a]);
+    //Open(a);
+    remove_element(a);
+  }
+*/
 
 
+//xml로 데이터를 저장하기 위해선 nbsp와 같은 문자열을 제거해야함
 
-  xmlData += '</item>';
-  xmlData += '</VISION>';
+
+    var xmlData = '';
+    xmlData += '<?xml version="1.0" encoding="euc-kr"?>';
+    xmlData += '<data>';
+
+  for(var a = 0; a<32; a++ ){
+    if((31-a) == 0 ){
+      break;
+    }
+    else{
+
+      while(save_data[a].search('&nbsp;') != -1){
+      save_data[a] = save_data[a].replace('&nbsp;','');
+    }
+      while(save_data[a].search('&nbsp') != -1){
+        save_data[a] = save_data[a].replace('&nbsp','');
+    }
+
+      while(save_data[a].search('&gt;') != -1){
+       save_data[a] = save_data[a].replace('&gt;','');
+      }
+
+      Open(a);
+
+      if(save_data[a].search(Opentime[a]) != -1){
+       save_data[a] = save_data[a].replace(Opentime[a],'');
+     }
+     temp_search = save_data[a].search(31-a);
+     temp_search2 = save_data[a].indexOf('time',temp_search);
+     temp_slice = save_data[a].slice(temp_search,temp_search2+4);
+
+     save_data[a] = save_data[a].replace(temp_slice,'');
+
+
+
+      xmlData += '<member>';
+      xmlData += '<day>' +  (31 - a) + "일 예약 현황"  + '</day>';
+      xmlData += '<open>' + Opentime[a] + '</open>';
+      xmlData += '<reservation>' + save_data[a] + '</reservation>';
+      xmlData += '</member>';
+  }
+ }
+
+    xmlData += '</data>';
 
 
 
@@ -297,6 +335,19 @@ function to_date(){
    }
 }
 
+ function remove_element(day_search){
+
+   while(save_data[day_search].search('&nbsp;') != -1){
+   save_data[day_search] = save_data[day_search].replace('&nbsp;','');
+ }
+
+   while(save_data[day_search].search('&gt;') != -1){
+    save_data[day_search] = save_data[day_search].replace('&gt;','');
+   }
+
+
+ }
+
  function Open(day_search){
 
   temp_search = save_data[day_search].search(']');
@@ -323,12 +374,12 @@ function to_date(){
     }
 
   else{
-      alert('문여는 시간이 정해지지 않았습니다.');
+    //  alert('문여는 시간이 정해지지 않았습니다.');
       Opentime[day_search] = "문 여는 시간이 정해지지 않았습니다.";
     }
 
   } else {
-    alert('문여는 시간이 존재');
+  //  alert('문여는 시간이 존재');
     temp_search = temp_slice.search(']');
     temp_search2 = temp_slice.lastIndexOf("0");
     temp_slice = temp_slice.slice(temp_search+1,temp_search2+1);

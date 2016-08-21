@@ -49,6 +49,11 @@
 					?>
 			</tbody>
 		</table>
+		<div class="btnSet">
+			<a href="./write.php?bno=<?php echo $bNo?>">수정</a>
+			<a href="./delete.php?bno=<?php echo $bNo?>">삭제</a>
+			<a href="./">목록</a>
+		</div>
 	</article>
 </body>
 </html>

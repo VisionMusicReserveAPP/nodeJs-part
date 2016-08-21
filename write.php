@@ -49,11 +49,11 @@
               <td class="password"><input type="text" name="bPassword" id="bPassword"></td>
            </tr>
            <tr>
-              <th scope="row"><label for="bTitle">아이디</label></th>
+              <th scope="row"><label for="bTitle">제목</label></th>
               <td class="title"><input type="text" name="bTitle" id="bTitle" value="<?php echo isset($row['b_title'])?$row['b_title']:null?>"></td>
            </tr>
            <tr>
-              <th scope="row"><label for="bContent">아이디</label></th>
+              <th scope="row"><label for="bContent">내용</label></th>
               <td class="content"><textarea name="bContent" id="bContent"><?php echo isset($row['b_content'])?$row['b_content']:null?></textarea></td>
            </tr>
          </tbody>

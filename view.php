@@ -43,7 +43,10 @@
 			<div class="btnSet">
 				<a href="./write.php?bno=<?php echo $bNo?>">수정</a>
 				<a href="./delete.php?bno=<?php echo $bNo?>">삭제</a>
-				<a href="./">목록</a>
+				<a href="./index.php">목록</a>
+			</div>
+			<div id="boardComment">
+				<?php require_once('comment.php');?>
 			</div>
 		</div>
 	</article>

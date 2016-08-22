@@ -59,8 +59,7 @@
          </tbody>
        </table>
        <div class="btnSet">
-         <button type="submit" class="btnSubmit btn">작성</button>
-            <?php echo isset($bNo)?'수정':'작성'?>
+         <button type="submit" class="btnSubmit btn"><?php echo isset($bNo)?'수정':'작성'?></button>
          <a href="index.php" class="btnList btn">목록</a>
        </div>
      </form>

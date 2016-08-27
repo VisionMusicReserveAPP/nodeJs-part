@@ -7,9 +7,31 @@
   <link rel ="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
   <Script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="./scripts/bbs_list.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/common.css" />
   <script>
+  //스마트폰을 구분하는 코드
+  /*
+  var smartPhone = {
+    'iphone', 'ipod',
+    'windows ce','android',
+    'blackberry','nokia','webos',
+    'opera mini','sonyericsson',
+    'opera mobi','iemobile'
+  };
+*/
+
+  var day_list = 0; // 처음 날 값
+
+  function checkmobile(){
+    for (var i in smartPhone){
+      //스마트 폰을 확인하는 함수
+      if(navigator.userAgent.toLowerCase().match(new RegExp(smartPhone[i]))){
+        alert('모바일에서 접속하셨습니다.');
+      }
+    }
+  }
+
+
   var melon ='';
   function xmlparsing(){
     var xmlDoc = null;
@@ -69,12 +91,16 @@
   }
 
   function load_data(){
+
+    $('#day_title').empty();
+    $('#day_open').empty();
+    $('#day_content').empty();
+
     var request = new createRequest();
 
     request.open('GET','data.xml',false);
     request.send();
 
-  //  alert(request.responseXML);
 
     var xml = request.responseXML;
 
@@ -82,13 +108,26 @@
     var opens = xml.getElementsByTagName('open');
     var reservations = xml.getElementsByTagName('reservation');
 
-    for(var i =0;i<days.length;i++){
-      var day = days[i].childNodes[0].nodeValue;
-      var open = opens[i].childNodes[0].nodeValue;
-      var reservation = reservations[i].childNodes[0].nodeValue;
 
-      //배열로 저장 하기 json형식으로 
-    }
+      var day = days[day_list].childNodes[0].nodeValue;
+      var open = opens[day_list].childNodes[0].nodeValue;
+      var reservation = reservations[day_list].childNodes[0].nodeValue;
+
+      var result_title = '';
+      var result_open = '';
+      var result_content = '';
+
+      result_title += '<h1>'+day+"일 예약 현황" + '</h1>';
+      result_open  += '<p>' + open + '</p>';
+      result_content += '<p>' + reservation +'</p>';
+
+
+      $('#day_title').append(result_title);
+      $('#day_open').append(result_open);
+      $('#day_content').append(result_content);
+
+
+      //배열로 저장 하기 json형식으로
 
 
 
@@ -114,8 +153,24 @@
   $(document).ready(function(){
       $('#showchart').hide();
       $('#search').hide();
+      $('#sub_content').show();
+      $('#resultdata').hide();
+      $('#search_result').hide();
 
 
+
+
+    $('#load_thismonth').click(function(event){
+      load_data();
+      $('#sub_content').hide(); // 서브콘텐츠를 숨김
+      $('#resultdata').show();
+    });
+
+    $('#data_back').click(function(event){
+      //이전으로 돌아가는 버튼을 누른 경우
+      $('#resultdata').hide();
+      $('sub_content').show();
+    });
 
     $('#chart').click(function (event){
       melonchart();
@@ -129,9 +184,50 @@
       $('#search_music').hide();
     });
 
-    $('#reservation_btn').click(function(event){
+    $('#day_search').click(function(event){
+      $('#search_result').show();
+
+
+    });
+
+    $('#day_left').click(function(event){
+      day_list = day_list -1;
+      if(day_list < 0){
+        alert("이달의 첫번째 예약입니다.");
+        day_list = 0;
+        load_data();
+      }
+      else if(day_list > 31){
+        alert("이달의 마지막 예약입니다.");
+        day_list = 30;
+        load_data();
+      }
       load_data();
     });
+
+    $('#submit').click(function(event){
+      day_list = $('#text_search').val();
+      day_list =  31 - day_list;
+      load_data();
+    });
+
+    $('#day_right').click(function(event){
+      day_list = day_list + 1;
+      if(day_list < 0){
+        alert("이달의 첫번째 예약입니다.");
+        day_list = 0;
+        load_data();
+      }
+      else if(day_list > 31){
+        alert("이달의 마지막 예약입니다.");
+        day_list = 30;
+        load_data();
+      }
+      load_data();
+    });
+
+
+
 
 
 
@@ -141,13 +237,14 @@
 
 
   </head>
+  <body>
   <div data-role ="page" id="main">
     <div date-role ="header" data-theme="b" data-position="inline">
       <h2>예약 확인 체계</h2>
     </div>
     <div data-role="content">
       <ul data-role="listview" data-inset="true">
-        <li id="reservation_btn"><a href= "#reservation">
+        <li><a href= "#reservation">
           <img src="reservation.png" alt="" />
           <h3>예약 확인</h3></a>
         </li>
@@ -159,28 +256,60 @@
           <img src="music.png" alt="" />
           <h3>음악 검색</h3></a>
         </li>
-        <li><a href ="#board">
+        <li><a href ="http://localhost/index.php">
           <img src="board.png" alt="" />
           <h3>공지사항</h3></a>
         </li>
       </ul>
     </div>
   </div>
+
+
   <div data-role="page" id="reservation" >
     <div data-role="header" data-theme="b">
   <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
       <h1> 예약 확인 </h1>
     </div>
     <div data-role="content">
-      <div id="showdata">
+      <div id="sub_content">
+      <input type ="button" id = "load_thismonth" value ="예약 불러오기" alt="이번달 예약을 불러옵니다."/>
       </div>
     </div>
-    <div data-role="footer" data-theme="b">
-
+      <div id="resultdata">
+          <div data-role="fieldcontain">
+              <div id= "day_title" class ="ui-grid-a">
+              </div>
+        </div>
+        <div data-role="fieldcontain">
+            <div id= "day_open" class ="ui-grid-a">
+            </div>
+          </div>
+        <div data-role="fieldcontain">
+          <div id= "day_content" class ="ui-grid-a">
+          </div>
+        </div>
+      </div>
+      <div id="search_result">
+        <div data-role="fieldcontain">
+          <label for="search">날짜를 적으세요</label>
+          </br>
+          <br>
+          <input type="range" name ="slider" id ="text_search" value ="1" min="1" max="31"/>
+          </br>
+          <br>
+          <input type="button" id="submit" value="찾기" />
+      </div>
+    </div>
+    <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role ="navbar">
+      <ul>
+        <li><input type="button" id="day_left" data-icon="arrow-l" value="left"></li>
+        <li><input type="button" id="day_search" data-icon="search" value="search"></li>
+        <li><input type="button" id="day_right" data-icon="arrow-r" value="right"></li>
+      </ul>
     </div>
   </div>
-
-
+</div>
 
  <div data-role="page" id="location" >
     <div data-role="header" data-theme="b">
@@ -227,28 +356,14 @@
       <iframe src="https://m.map.daum.net/actions/detailMapView?id=17102981&q=%EB%B9%84%EC%A0%84%ED%95%A9%EC%A3%BC%EC%8B%A4" width="500" height="400" frameborder="0" scrolling="yes"> 이 브라우저는 iframe을 지원하지 않습니다. </iframe>
     </div>
 
-    </div>
-    </div>
+  </div>
+</div>
     <div data-role="footer" data-theme="b">
 
     </div>
 
-    <div data-role="page" id="board" >
-      <div data-role="header" data-theme="b">
-    <a href="#main" data-icon="home" data-direction="reverse" class="ui-btn-left">Home</a>
-        <h1> 공지사항 </h1>
-      </div>
-      <div data-role="content">
-
-        <div class="wrap">
-           <ul id="bbsListArea"></ul>
-       </div>
-
-      </div>
-      <div data-role="footer" data-theme="b">
-            <button id="btnWrite">글쓰기</button>
-      </div>
     </div>
+
 
 
 

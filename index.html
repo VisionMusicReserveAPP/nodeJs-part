@@ -1,120 +1,62 @@
-<!DOCTYPE html>
 <html>
 <head>
-<title>jQuery Mobile 웹 응용 프로그램</title>
-<link href="jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css"/>
-<link href="jquery.mobile.structure-1.0.min" rel="stylesheet" type="text/css"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="jquery.mobile-1.0.min" type="text/javascript">
-</script>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title> 앱 로그인  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no">
+  <link rel ="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <Script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+  <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/common.css" />
+  <script>
+  Kakao.init('8b249a631dd007513593ef7c6c5b7166');
 
-<link  href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
+  function loginWithKakao(){ // 사용자 정보 띄우기 -> 사용자 정보를 중앙 db에 저장
+    //로그인 창을 띄움
+    Kakao.Auth.login({
+      success: function(authObj){
+        Kakao.API.request({
+          url: '/v1/user/me',
+          success: function(res){
+            //로그인 성공시 버튼이 없어지고 사용자 정보가 제공됨
+            document.getElementById('JSONOPEN').innerHTML = JSON.stringify(res);
+            var copy = JSON.parse(JSON.stringify(res));
+            alert("사용자 : " + copy.properties.nickname);
+            alert("사용자 : " + copy.properties.thumbnail_image);
+            var profile = '<img src='+ copy.properties.thumbnail_image + ' width=100 height=100 />';
+            //사용자 db 정보를 phpadmin에 저장 후 게시판에 글 쓸때 이용가능하게 만들기 
+            document.getElementById("JSONOPEN").innerHTML = profile;
+          },
+          fail: function(error){
+            alert(JSON.stringify(error));
+          }
+        });
+      },
+      fail: function(err){
+        alert(JSON.stringify(err));
+      }
+    });
+  };
 
-
-<script src="kakao.min.js"></script>
-<style type="text/css">
-.header{ background: #f02f5c }
-
-
-</style>
-<script language="JavaScript">
-<!--
-var xmlHttp;
-
-function createXMLHttpRequest() {
-    if(window.ActiveXObject) {
-        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-    } else if(window.XMLHttpRequest) {
-        xmlHttp = new XMLHttpRequest();
-    }
-}
-
-function startRequest() {
-    createXMLHttpRequest();
-    xmlHttp.onreadystatechange = handleStateChange;
-    xmlHttp.open("GET", "test1.xml", true);
-    xmlHttp.send(null);
-}
-
-function handleStateChange() {
-    if(xmlHttp.readyState == 4) {
-        if(xmlHttp.status == 200) {
-            alert("서버로부터의 응답 : " + xmlHttp.responseText);
-        }
-    }
-}
-//-->
-</script>
-
-
-<meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.4.5, minimum-scale=1.0, width=device-width"/>
-
-
+  </script>
 </head>
 <body>
+  <div data-role ="page" id="main">
+    <div date-role ="header" data-theme="b" data-position="inline">
+      <h2>예약 확인 체계</h2>
+    </div>
+    <div data-role="content">
+      <a id="custom-login-btn" href="javascript:loginWithKakao()">
+  <img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="300"/>
+  </a>
+    <div id="JSONOPEN">
+    </div>
+    </div>
+    <div data-role="footer" data-theme="b" data-position="fixed">
 
-<div data-role="page" id="main">
-	<div class="header" data-role="header" data-theme="b" id="main_header">
-		<h1 class = >Vision 합주실</h1>
-	</div>
-	<div data-role="content">
-    <form action="#">
-    <input type="button" value="간단한 비동기 요청 시작" onclick="startRequest();"/>
-</form>
-   <div class="fotorama">
-  <a href="http://youtube.com/watch?v=C3lWwBslWqg">소개영상</a>
-</div>
-
- 	</div>
-
-
-
-
-
-	</div>
-	<div data-role="footer">
-		<h4>페이지 바닥글</h4>
-	</div>
-</div>
-
-<div data-role="page" id="page2">
-	<div data-role="header">
-		<h1>2페이지</h1>
-	</div>
-	<div data-role="content">
-		내용
-	</div>
-	<div data-role="footer">
-		<h4>페이지 바닥글</h4>
-	</div>
-</div>
-
-<div data-role="page" id="page3">
-	<div data-role="header">
-		<h1>3페이지</h1>
-	</div>
-	<div data-role="content">
-		내용
-	</div>
-	<div data-role="footer">
-		<h4>페이지 바닥글</h4>
-	</div>
-</div>
-
-<div data-role="page" id="page4">
-	<div data-role="header">
-		<h1>4페이지</h1>
-	</div>
-	<div data-role="content">
-		내용
-	</div>
-	<div data-role="footer">
-		<h4>페이지 바닥글</h4>
-	</div>
-</div>
+    </div>
+  </div>
 
 </body>
 </html>

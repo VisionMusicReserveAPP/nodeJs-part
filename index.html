@@ -12,6 +12,24 @@
   <script>
   Kakao.init('8b249a631dd007513593ef7c6c5b7166');
 
+  var hour = 1;
+
+  function  sendTo(){
+    Kakao.Link.createTalkLinkButton({
+       container: '#kakao-link-btn',
+       label: '카카오링크 샘플에 오신 것을 환영합니다.',
+       image: {
+         src: 'http://dn.api1.kage.kakao.co.kr/14/dn/btqaWmFftyx/tBbQPH764Maw2R6IBhXd6K/o.jpg',
+         width: '300',
+         height: '200'
+       },
+       webButton: {
+         text: '카카오 디벨로퍼스',
+         url: 'https://dev.kakao.com/docs/js' // 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
+       }
+     });
+  };
+
   function loginWithKakao(){ // 사용자 정보 띄우기 -> 사용자 정보를 중앙 db에 저장
     //로그인 창을 띄움
     Kakao.Auth.login({
@@ -25,7 +43,7 @@
             alert("사용자 : " + copy.properties.nickname);
             alert("사용자 : " + copy.properties.thumbnail_image);
             var profile = '<img src='+ copy.properties.thumbnail_image + ' width=100 height=100 />';
-            //사용자 db 정보를 phpadmin에 저장 후 게시판에 글 쓸때 이용가능하게 만들기 
+            //사용자 db 정보를 phpadmin에 저장 후 게시판에 글 쓸때 이용가능하게 만들기
             document.getElementById("JSONOPEN").innerHTML = profile;
           },
           fail: function(error){
@@ -50,6 +68,9 @@
       <a id="custom-login-btn" href="javascript:loginWithKakao()">
   <img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="300"/>
   </a>
+      <a id="kakao-link-btn" href="javascript:sendTo()"><img src="lisst.png" width="300"/>
+      </a>
+
     <div id="JSONOPEN">
     </div>
     </div>
